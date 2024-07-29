@@ -1,6 +1,8 @@
 #!/bin/bash
 
 pwd=$(cd $(dirname $0);pwd)
+pwdsw="${pwd}/software"
+xhome="${HOME}"
 
 source "${pwd}/scripts/common.sh"
 source "${pwd}/scripts/software.sh"
@@ -8,6 +10,26 @@ source "${pwd}/scripts/software.sh"
 
 function do_terminal_zsh() {
     package_install "zsh"
+    package_install "fzf"
+    package_install "fd"
+    package_install "bat"
+
+    # check zsh is default
+    local cmd=$(echo $SHELL)
+    if [[ $cmd == *"zsh" ]];then
+        e_ok "zsh is default shell"
+    else
+        e_warn "zsh is not default shell"
+        chsh -s $(which zsh)
+        e_info "you should reboot system and go on..."
+        exit 0
+    fi
+
+    # zinit install
+    file_copy "${pwdsw}/zsh/.zshenv" "${xhome}/.zshenv"
+    file_copy "${pwdsw}/zsh/.zshrc" "${xhome}/.config/zsh/.zshrc"
+    exec zsh
+    # zinit finish
 }
 
 function do_terminal_foot() {

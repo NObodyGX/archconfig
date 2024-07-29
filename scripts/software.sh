@@ -32,7 +32,7 @@ function package_install() {
 function package_link() {
     local name="$1"
     local dir1="${pwd}/software/${name}"
-    local dir2="/home/xun/.config/${name}"
+    local dir2="${xhome}/.config/${name}"
 
     if [ ! -d ${dir1} ];then
         e_err "dir1 is not exist, exit"
@@ -63,3 +63,19 @@ function package_link() {
     fi
 }
 
+function file_copy() {
+    cp -f $1 $2
+}
+
+function file_link() {
+    ln -sf $1 $2
+}
+
+function dir_copy() {
+    local dir1="$1"
+    local dir2="$2"
+    if [ ! -d ${dir2} ];then
+        mkdir -p ${dir2}
+    fi
+    cp -r ${dir1} ${dir2}
+}
