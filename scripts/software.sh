@@ -2,7 +2,7 @@
 source "${pwd}/scripts/common.sh"
 
 function package_check() {
-    local cmd=$(paru -Q $1)
+    local cmd=$(yay -Q $1)
     if [ -z "${cmd}" ];then
         return 1;
     fi
@@ -19,7 +19,7 @@ function package_install() {
     local flag=0
     if ! package_check "${pkgname}" ;then
         e_info "try install ${pkg}"
-        paru -S ${pkg} --noconfirm
+        yay -S ${pkg} --noconfirm
         flag=1
     fi
     if ! package_check "${pkgname}" ;then
