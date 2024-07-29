@@ -90,21 +90,44 @@ function do_user_files() {
     fi
 }
 
-function do_user_media() {
+function do_user_filemanager() {
+    package_install "yazi"
+    package_install "superfile"
+}
+
+function do_files() {
+    e_title "files"
+    do_user_files
+    do_user_filemanager
+}
+
+
+function do_software() {
+    e_title "software"
     # video
     package_install "vlc"
     package_install "mpv"
     # netease-cloud
     package_install "qcm"
     package_install "syncthing"
-
+    # picture
+    package_install "inkscape"
+    package_install "feh"
+    package_install "krita"
+    package_install "gimp"
+    # text
+    package_install "pulsar-bin"
+    package_install "lapce"
+    package_install "helix"
+    # dev
+    package_install "insomnia"
+    # disk
+    package_install "filelight"
+    # eyes
+    package_install "workrave"
+    package_install "wluma"
 }
 
-function do_files() {
-    e_title "files"
-    do_user_files
-    do_user_media
-}
 
 function main() {
     echo_rainbow "#========== NObodyGX  ==========#"
@@ -113,6 +136,7 @@ function main() {
 
     do_terminal
     do_files
+    do_software
     
     echo_rainbow "#==========   END   ==========#"
 }
