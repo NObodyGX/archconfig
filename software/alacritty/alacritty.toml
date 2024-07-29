@@ -1,0 +1,59 @@
+#设置改变配置自动启动 [window]的需要重启
+live_config_reload = true
+
+#改变窗口设置
+[window]
+#窗口大小
+dimensions = { columns = 135, lines = 30 }
+padding = { x = 4, y = 2 }
+dynamic_padding = true
+#透明度
+opacity = 0.9
+#窗口名字
+title = "Alacritty"
+
+#字体
+[font]
+normal = { family = "Maple Mono SC NF", style = "Regular" }
+bold = { family = "Maple Mono SC NF", style = "Bold" }
+italic = { family = "Maple Mono SC NF", style = "Italic" }
+size = 12.0
+
+#颜色主题可以在github上找想要的主题，复制他的配色.
+# Colors (Everforest Dark)
+
+# Default colors
+[colors.primary]
+background = '#2d353b'
+foreground = '#d3c6aa'
+
+# Normal colors
+[colors.normal]
+black   = '#475258'
+red     = '#e67e80'
+green   = '#a7c080'
+yellow  = '#dbbc7f'
+blue    = '#7fbbb3'
+magenta = '#d699b6'
+cyan    = '#83c092'
+white   = '#d3c6aa'
+
+# Bright colors
+[colors.bright]
+black   = '#475258'
+red     = '#e67e80'
+green   = '#a7c080'
+yellow  = '#dbbc7f'
+blue    = '#7fbbb3'
+magenta = '#d699b6'
+cyan    = '#83c092'
+white   = '#d3c6aa'
+
+
+#光标
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+
+[terminal]
+#设定复制黏贴行为 默认只能复制
+osc52 = "CopyPaste"

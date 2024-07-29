@@ -17,7 +17,7 @@ function do_terminal_zsh() {
     # check zsh is default
     local cmd=$(echo $SHELL)
     if [[ $cmd == *"zsh" ]];then
-        e_ok "zsh is default shell"
+        e_ok "defaulted zsh"
     else
         e_warn "zsh is not default shell"
         chsh -s $(which zsh)
@@ -26,23 +26,36 @@ function do_terminal_zsh() {
     fi
 
     # zinit install
-    file_copy "${pwdsw}/zsh/.zshenv" "${xhome}/.zshenv"
-    file_copy "${pwdsw}/zsh/.zshrc" "${xhome}/.config/zsh/.zshrc"
-    exec zsh
+    if [ ! -f "${xhome}/.config/zsh/zinit/zinit.git/zinit.zsh" ];then
+        file_copy "${pwdsw}/zsh/.zshenv" "${xhome}/.zshenv"
+        file_copy "${pwdsw}/zsh/.zshrc" "${xhome}/.config/zsh/.zshrc"
+        exec zsh
+    else
+        e_ok "installed zinit"
+    fi
     # zinit finish
 }
 
 function do_terminal_foot() {
+    package_install "ttf-maple-sc-nerd"
     package_install "foot"
     package_install "lsix"
-    package_install "ttf-maple-sc-nerd"
 
     package_link "foot"
 }
 
+function do_terminal_alacritty() {
+    package_install "ttf-maple-sc-nerd"
+    package_install "alacritty"
+
+    package_link "alacritty"
+}
+
 function do_terminal() {
+    e_title "terminal"
     do_terminal_zsh
     do_terminal_foot
+    do_terminal_alacritty
 }
 
 function main() {

@@ -77,30 +77,34 @@ function echo_rainbow() {
 }
 #=============================================
 
-
-#================= echo normal ===============
-function e_info() {
+#================= echo color  ===============
+function e_title() {
+    get_cstyle "b"
     get_ccode "cyan"
-    i_echo_nowarp "[info]"
-    get_ccode "white"
+    i_echo "********" $* "********"
+}
+#================= echo normal ===============
+function _e_print() {
+    get_cstyle ""
+    get_ccode "$1"
+    i_echo_nowarp "$2"
+    get_ccode "$3"
+}
+
+function e_info() {
+    _e_print "cyan" "[info]" "white"
     i_echo $*
 }
 function e_warn() {
-    get_ccode "yellow"
-    i_echo_nowarp "[warn]"
-    get_ccode "white"
+    _e_print "yellow" "[warn]" "white"
     i_echo $*
 }
 function e_err() {
-    get_ccode "red"
-    i_echo_nowarp "[error]"
-    get_ccode "white"
+    _e_print "red" "[error]" "white"
     i_echo $*
 }
 function e_ok() {
-    get_ccode "green"
-    i_echo_nowarp "[ok]"
-    get_ccode "white"
+    _e_print "green" "[ok]" "white"
     i_echo $*
 }
 #=============================================

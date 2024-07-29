@@ -4,9 +4,6 @@ export ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
 
 source "${ZINIT_HOME}/zinit.zsh"
 
-autoload -Uz _zinit compinit && compinit 
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
 ### User config here ###
 ## Load prompt theme
 zinit light denysdovhan/spaceship-prompt
