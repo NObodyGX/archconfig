@@ -79,23 +79,25 @@ function echo_rainbow() {
 
 
 #================= echo normal ===============
-function einfo() {
+function e_info() {
+    get_ccode "cyan"
+    i_echo_nowarp "[info]"
     get_ccode "white"
     i_echo $*
 }
-function ewarn() {
+function e_warn() {
     get_ccode "yellow"
     i_echo_nowarp "[warn]"
     get_ccode "white"
     i_echo $*
 }
-function eerror() {
+function e_err() {
     get_ccode "red"
     i_echo_nowarp "[error]"
     get_ccode "white"
     i_echo $*
 }
-function eok() {
+function e_ok() {
     get_ccode "green"
     i_echo_nowarp "[ok]"
     get_ccode "white"
