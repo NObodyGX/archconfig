@@ -1,0 +1,21 @@
+"*":
+  core:
+    allowWindowTransparency: true
+    disabledPackages: [
+      "spell-check"
+    ]
+  editor:
+    defaultFontSize: 16
+    fontFamily: "LXGW WenKai Mono, Consolas, DejaVu Sans Mono, monospace"
+    fontSize: 16
+    invisibles:
+      cr: " "
+      eol: " "
+    preferredLineLength: 8000
+    scrollPastEnd: true
+    showInvisibles: true
+  "exception-reporting":
+    userId: "cf553f45-7a0d-4dab-9f83-749a3917575a"
+  welcome:
+    showChangeLog: false
+    showOnStartup: false

@@ -194,6 +194,11 @@ function do_text_vscode() {
     file_copy "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
 }
 
+function do_text_pulsar() {
+    package_install "pulsar-bin"
+    file_copy "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
+}
+
 function write_firefox_css() {
     local src="$1"
     try_mkdir "$src/chrome"
@@ -252,7 +257,7 @@ function do_software() {
     package_install "gimp"
     # text
     do_text_vscode
-    package_install "pulsar-bin"
+    do_text_pulsar
     package_install "lapce"
     package_install "helix"
     # dev
@@ -273,7 +278,6 @@ function main() {
     echo_rainbow "#========== Arch Conf ==========#"
     echo_rainbow "#==========   START   ==========#"
 
-    
     do_env_check
     do_terminal
     do_input
