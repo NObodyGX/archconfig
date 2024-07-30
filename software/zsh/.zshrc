@@ -6,6 +6,8 @@ source "${ZINIT_HOME}/zinit.zsh"
 source "${HOME}/.config/zsh/nobodygx/alias.zsh"
 source "${HOME}/.config/zsh/nobodygx/devenv.zsh"
 
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
+
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
@@ -13,15 +15,17 @@ autoload -Uz _zinit
 ## Load prompt theme
 zinit light denysdovhan/spaceship-prompt
 ## xun plugins
+## notice: syntax-highlighting should be end
 zinit wait lucid light-mode for \
     supercrabtree/k \
     zsh-users/zsh-completions \
+    zsh-users/zsh-autosuggestions \
     Freed-Wu/zsh-command-not-found \
     Aloxaf/fzf-tab \
     MichaelAquilina/zsh-you-should-use \
     hlissner/zsh-autopair \
-    zdharma/fast-syntax-highlighting \
-    
+    zsh-users/zsh-syntax-highlighting \
+
 
 # force saving all history
 export HISTSIZE=1000000000

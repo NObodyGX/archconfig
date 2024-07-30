@@ -14,6 +14,7 @@ alias mv='mv -iv'
 alias rm='rm -iv'
 alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
+alias ls="ls --color=auto"
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"

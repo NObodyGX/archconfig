@@ -4,7 +4,8 @@
 # terminal-cmd: clear
 export TERMINFO=/usr/share/terminfo
 # curl ssh error
-export CURL_CA_BUNDLE=/opt/anaconda/ssl/cacert.pem
+# export CURL_CA_BUNDLE=/opt/anaconda/ssl/cacert.pem
+export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 # ccache
 export USE_CCACHE=1
 export CCACHE_SLOPPINESS=file_macro,include_file_mtime,time_macros
