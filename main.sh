@@ -17,7 +17,7 @@ function try_add_text() {
     local content="$1"
     local dst="$2"
     if [ ! -f ${dst} ];then
-        touch $dst
+        echo "" > $dst
     fi
     local cmd=$(cat $dst | grep $content)
     if [ -z $cmd ];then
@@ -194,6 +194,49 @@ function do_text_vscode() {
     file_copy "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
 }
 
+function write_firefox_css() {
+    local src="$1"
+    try_mkdir "$src/chrome"
+    local filename="$src/chrome/userChrome.css"
+    if [ ! -f $filename ];then
+        cat>"${filename}"<<EOF
+/*隐藏分页标签*/
+#TabsToolbar { visibility: collapse !important; }
+/*动态隐藏书签列*/
+:root:not([customizing]) #PersonalToolbar {
+max-height: 0 !important;
+min-height: 0.1px !important;
+opacity: 0;
+transition: opacity 0.15s ease-in !important;
+}
+:root:not([customizing]) :hover > #PersonalToolbar,
+:root:not([customizing]) #navigator-toolbox:focus-within #PersonalToolbar {
+max-height: 4em !important;
+opacity: 1;
+}
+EOF
+    fi
+
+    if [ -f $filename ];then
+        e_ok "Checked firefox userCss"
+    fi
+}
+
+function do_firefox() {
+    e_title "firefox"
+    package_install "firefox"
+    local src="${xhome}/.mozilla/firefox"
+    for item in $(ls -a $src); do
+        if [ -d "$src/$item" ];then
+            if [[ $item == *"default" ]];then
+                write_firefox_css $src/$item
+            elif [[ $item == *"default-release" ]];then
+                write_firefox_css $src/$item
+            fi
+        fi
+    done
+}
+
 function do_software() {
     e_title "software"
     # video
@@ -230,10 +273,12 @@ function main() {
     echo_rainbow "#========== Arch Conf ==========#"
     echo_rainbow "#==========   START   ==========#"
 
+    
     do_env_check
     do_terminal
     do_input
     do_files
+    do_firefox
     do_dev_software
     do_software
     
