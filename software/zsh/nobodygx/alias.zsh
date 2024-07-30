@@ -9,6 +9,12 @@ alias yayq="yay -Q | grep "
 alias files="nautilus "
 alias kk="du -sh *"
 
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+alias grep="grep -i --color=auto"
+alias mkdir="mkdir -p"
+
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"

@@ -134,6 +134,13 @@ function do_dev_software() {
     package_install "anaconda"
 }
 
+function do_text_vscode() {
+    package_install "vscodium-bin"
+    package_install "vscodium-bin-features"
+    package_install "vscodium-bin-marketplace"
+
+    file_copy "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
+}
 
 function do_software() {
     e_title "software"
@@ -149,6 +156,7 @@ function do_software() {
     package_install "krita"
     package_install "gimp"
     # text
+    do_text_vscode
     package_install "pulsar-bin"
     package_install "lapce"
     package_install "helix"

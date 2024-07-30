@@ -14,7 +14,6 @@ autoload -Uz _zinit
 zinit light denysdovhan/spaceship-prompt
 ## xun plugins
 zinit wait lucid light-mode for \
-    hcgraf/zsh-sudo \
     supercrabtree/k \
     zsh-users/zsh-completions \
     Freed-Wu/zsh-command-not-found \
@@ -30,9 +29,40 @@ export SAVEHIST=1000000000
 setopt EXTENDED_HISTORY
 
 # keymap
-# see key u want: ``cat`` + ``enter`` + ``the-key``
-bindkey  "^[[H"   beginning-of-line
-bindkey  "^[[F"   end-of-line
-bindkey  "^[[3~"  delete-char
+# use `read -k` to get a key sequence
+# or `cat + enter + the-key`
+typeset -gA keys=(
+  Up              '^[[A'
+  Down            '^[[B'
+  Home            '^[[H'
+  End             '^[[F'
+  Delete          '^[[3~'
+  Escape          '^['
+
+  Ctrl+Delete     '^[[3;5~'
+  Ctrl+K          '^K'
+)
+bindkey -- "${keys[Delete]}" delete-char
+bindkey -- "${keys[Ctrl+Delete]}" delete-char
+bindkey -- "${keys[Home]}" beginning-of-line
+bindkey -- "${keys[End]}" end-of-line
+bindkey "${keys[Ctrl+K]}" kill-whole-line
+
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey -- "${keys[Up]}" up-line-or-beginning-search
+bindkey -- "${keys[Down]}" down-line-or-beginning-search
+
+zle -N sudo-command-line
+sudo-command-line() {
+  if [[ $BUFFER == sudo\ * ]]; then
+    LBUFFER="${LBUFFER#sudo }"
+  else
+    LBUFFER="sudo $LBUFFER"
+  fi
+}
+bindkey "${keys[Escape]}${keys[Escape]}" sudo-command-line
 # keymap end
 
