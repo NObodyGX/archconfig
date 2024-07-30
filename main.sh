@@ -9,8 +9,7 @@ source "${pwd}/scripts/common.sh"
 source "${pwd}/scripts/software.sh"
 
 function sudo_run() {
-    local $cmd="$1"
-    sudo -u root -H sh -c "$cmd"
+    sudo -u root -H sh -c "$1"
 }
 
 function try_add_text() {
@@ -242,6 +241,10 @@ function do_firefox() {
     done
 }
 
+function do_goldendict() {
+    package_install "goldendict-ng-git"
+}
+
 function do_software() {
     e_title "software"
     # video
@@ -270,8 +273,49 @@ function do_software() {
     # package_install "stretchly-bin"
     # light adjust
     package_install "wluma"
+
+    do_goldendict
 }
 
+function write_fstab() {
+    local diskname="$1"
+    local mpoint="$2"
+
+    if [ ! -d $mpoint ];then
+        e_info "try create $mpoint"
+        sudo_run "mkdir -p $mpoint"
+    fi
+
+    local tmpf="/tmp/_tmp2.log"
+    local cmd=$(sudo -u root -H sh -c "lsblk -f" > $tmpf)
+    local dtype=$(grep "$diskname" $tmpf | awk '{print $2}')
+    local duuid=$(grep "$diskname" $tmpf | awk '{print $4}')
+    local content="UUID=$duuid   $mpoint   $dtype   defaults,noatime,nodiratime   0   0"
+    local dst="/etc/fstab"
+
+    echo " " > $tmpf
+    echo "# /dev/$diskname" >> $tmpf
+    echo "$content" >> $tmpf
+
+    sudo_run "cat $tmpf >> $dst"
+}
+
+function do_disk_mount() {
+    # lsblk -f
+    # fdisk -l
+    local tmpf="/tmp/_tmp1.log"
+    local cmd=$(sudo -u root -H sh -c "cat /etc/fstab" > $tmpf)
+    if [ -z "$(grep "/data" $tmpf)" ];then
+        write_fstab "sda1" "/data"
+    else
+        e_ok 'mounted /data'
+    fi
+    if [ -z "$(grep "/code" $tmpf)" ];then
+        write_fstab "sdb1" "/code"
+    else
+        e_ok 'mounted /code'
+    fi
+}
 
 function main() {
     echo_rainbow "#========== NObodyGX  ==========#"
@@ -285,7 +329,7 @@ function main() {
     do_firefox
     do_dev_software
     do_software
-    
+    do_disk_mount
     echo_rainbow "#==========   END   ==========#"
 }
 
