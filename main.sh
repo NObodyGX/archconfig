@@ -8,6 +8,47 @@ xconf="${HOME}/.config"
 source "${pwd}/scripts/common.sh"
 source "${pwd}/scripts/software.sh"
 
+function sudo_run() {
+    local $cmd="$1"
+    sudo -u root -H sh -c "$cmd"
+}
+
+function try_add_text() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        touch $dst
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        echo $content >> $dst
+    fi
+}
+
+function try_add_text_sudo() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        sudo_run "touch $dst"
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        sudo_run "echo $content >> $dst"
+    fi
+}
+
+function try_mv() {
+    local p="${xhome}"
+    if [ -d "${p}/$1" ];then
+        mv "${p}/$1" "${p}/$2"
+    fi
+}
+
+function do_env_check() {
+    # check sudo
+    e_title "check env"
+    e_ok "checked env"
+}
 
 function do_terminal_zsh() {
     package_install "zsh"
@@ -83,31 +124,9 @@ function do_terminal() {
     do_terminal_vim
 }
 
-function try_add_text() {
-    local content="$1"
-    local dst="$2"
-    if [ ! -f ${dst} ];then
-        touch $dst
-    fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
-        echo $content >> $dst
-    fi
-}
-
-function try_add_text_sudo() {
-    local content="$1"
-    local dst="$2"
-    if [ ! -f ${dst} ];then
-        sudo -u root -H sh -c "touch $dst"
-    fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
-        sudo -u root -H sh -c "echo $content >> $dst"
-    fi
-}
 
 function do_input() {
+    e_title "input_method"
     package_install "fcitx5"
     package_install "fcitx5-chinese-addons"
     package_install "fcitx5-im" "fcitx5-qt"
@@ -118,14 +137,10 @@ function do_input() {
     try_add_text_sudo "XMODIFIERS=@im=fcitx5" "/etc/environment"
     try_add_text_sudo "INPUT_METHOD=fcitx5" "/etc/environment"
     try_add_text_sudo "SDL_IM_MODULE=fcitx5" "/etc/environment"
+    e_ok "installed fcitx5"
 }
 
-function try_mv() {
-    local p="${xhome}"
-    if [ -d "${p}/$1" ];then
-        mv "${p}/$1" "${p}/$2"
-    fi
-}
+
 
 function do_user_files() {
     local ff=${xconf}/user-dirs.dirs
@@ -215,6 +230,7 @@ function main() {
     echo_rainbow "#========== Arch Conf ==========#"
     echo_rainbow "#==========   START   ==========#"
 
+    do_env_check
     do_terminal
     do_input
     do_files
