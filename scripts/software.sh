@@ -95,6 +95,13 @@ function file_copy() {
     cp -f $src $dst
 }
 
+function try_mkdir() {
+    local dst="$1"
+    if [ ! -d "${dst}" ];then
+        mkdir -p "${dst}"
+    fi
+}
+
 
 function dir_copy() {
     local src="$1"

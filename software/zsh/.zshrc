@@ -15,18 +15,14 @@ zinit light denysdovhan/spaceship-prompt
 ## xun plugins
 zinit wait lucid light-mode for \
     hcgraf/zsh-sudo \
+    supercrabtree/k \
     zsh-users/zsh-completions \
-    Freed-Wu/zsh-command-not-found
-# Load these plugins 1 second after prompt loaded
-zinit wait="1" lucid light-mode for \
+    Freed-Wu/zsh-command-not-found \
     Aloxaf/fzf-tab \
-    zsh-users/zsh-autosuggestions \
-    zdharma/history-search-multi-word \
-    skywind3000/z.lua \
-    wfxr/forgit \
     MichaelAquilina/zsh-you-should-use \
     hlissner/zsh-autopair \
     zdharma/fast-syntax-highlighting \
+    
 
 # force saving all history
 export HISTSIZE=1000000000

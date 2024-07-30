@@ -55,11 +55,25 @@ function do_terminal_alacritty() {
     package_link "alacritty"
 }
 
+function do_terminal_wezterm() {
+    package_install "wezterm"
+}
+
+function do_terminal_vim() {
+    package_install "vim"
+    try_mkdir "${xconf}/vim"
+
+    package_link "vim/color" "${sdir}/vim/colors" "${xconf}/vim/colors"
+    file_link "${sdir}/vim/vimrc" "${xconf}/vim/vimrc"
+}
+
 function do_terminal() {
     e_title "terminal"
     do_terminal_zsh
     do_terminal_foot
     do_terminal_alacritty
+    do_terminal_wezterm
+    do_terminal_vim
 }
 
 function try_mv() {
