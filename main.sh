@@ -182,7 +182,7 @@ function do_dev_software() {
     package_install "rust"
     package_install "go"
     package_install "nvm"
-    package_install "anaconda"
+    do_conda
 }
 
 function do_text_vscode() {
@@ -314,6 +314,30 @@ function do_disk_mount() {
         write_fstab "sdb1" "/code"
     else
         e_ok 'mounted /code'
+    fi
+}
+
+function do_conda() {
+    package_install "miniconda3"
+
+    local filename="$xhome/.condarc"
+    if [ ! -f $filename ];then
+        cat>"${filename}"<<EOF
+channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - http://mirrors.aliyun.com/anaconda/pkgs/main
+  - http://mirrors.aliyun.com/anaconda/pkgs/r
+  - http://mirrors.aliyun.com/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: http://mirrors.aliyun.com/anaconda/cloud
+  msys2: http://mirrors.aliyun.com/anaconda/cloud
+  bioconda: http://mirrors.aliyun.com/anaconda/cloud
+  menpo: http://mirrors.aliyun.com/anaconda/cloud
+  pytorch: http://mirrors.aliyun.com/anaconda/cloud
+  simpleitk: http://mirrors.aliyun.com/anaconda/cloud
+EOF
     fi
 }
 
