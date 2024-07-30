@@ -6,7 +6,7 @@
     ]
   editor:
     defaultFontSize: 16
-    fontFamily: "LXGW WenKai Mono, Consolas, DejaVu Sans Mono, monospace"
+    fontFamily: "LXGW WenKai Mono,Maple Mono SC NF, Consolas, DejaVu Sans Mono, monospace"
     fontSize: 16
     invisibles:
       cr: " "

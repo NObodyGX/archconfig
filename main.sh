@@ -329,6 +329,7 @@ function main() {
     do_firefox
     do_dev_software
     do_software
+    # todo, add disk check in system
     do_disk_mount
     echo_rainbow "#==========   END   ==========#"
 }
