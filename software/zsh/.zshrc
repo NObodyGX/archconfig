@@ -3,6 +3,11 @@ export ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 
 source "${ZINIT_HOME}/zinit.zsh"
+source "${HOME}/.config/zsh/nobodygx/alias.zsh"
+source "${HOME}/.config/zsh/nobodygx/devenv.zsh"
+
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
 ### User config here ###
 ## Load prompt theme
@@ -22,9 +27,6 @@ zinit wait="1" lucid light-mode for \
     MichaelAquilina/zsh-you-should-use \
     hlissner/zsh-autopair \
     zdharma/fast-syntax-highlighting \
-
-
-
 
 # force saving all history
 export HISTSIZE=1000000000

@@ -1,5 +1,4 @@
 #!/bin/bash
-source "${pwd}/scripts/common.sh"
 
 function package_check() {
     local cmd=$(yay -Q $1)
@@ -11,71 +10,102 @@ function package_check() {
 
 function package_install() {
     local pkg="$1"
-    local pkgname="$2"
-    if [ -z $pkgname ];then
-        pkgname=$pkg
+    local pname="$2"
+    if [ -z $pname ];then
+        pname=$pkg
     fi
 
     local flag=0
-    if ! package_check "${pkgname}" ;then
+    if ! package_check "${pname}" ;then
         e_info "try install ${pkg}"
         yay -S ${pkg} --noconfirm
         flag=1
     fi
-    if ! package_check "${pkgname}" ;then
+    if ! package_check "${pname}" ;then
         e_err "install ${pkg} get some error. try manual..."
         return 1;
     fi
     e_ok "installed ${pkg} "
 }
 
-function package_link() {
-    local name="$1"
-    local dir1="${pwd}/software/${name}"
-    local dir2="${xhome}/.config/${name}"
+function do_link() {
+    local src="$1"
+    local dst="$2"
 
-    if [ ! -d ${dir1} ];then
-        e_err "dir1 is not exist, exit"
-        return 1
-    fi
-
-    if [ -h ${dir2} ];then
-        e_ok "linked ${name}"
+    if [ -h ${dst} ];then
+        e_ok "linked ${dst}"
         return 0
     fi
 
-    if [ -d ${dir2} ];then
-        e_info "delete dir: ${dir2}"
-        rm -rf ${dir2}
-    elif [ -f ${dir2} ];then
-        e_info "delete file: ${dir2}"
-        rm -f ${dir2}
+    if [ -d ${dst} ];then
+        e_info "delete dir: ${dst}"
+        rm -rf ${dst}
+    elif [ -f ${dst} ];then
+        e_info "delete file: ${dst}"
+        rm -f ${dst}
     fi
 
-    e_info "start link"
-    ln -s ${dir1} ${dir2}
-    if [ -h ${dir2} ];then
-        e_ok "linked ${name}"
+    e_info "${src} ====> ${dst}"
+    ln -s ${src} ${dst}
+    if [ -h ${dst} ];then
+        e_ok "linked ${dst}"
         return 0
     else
-        e_err "${dir2} link failed, try manual"
+        e_err "${dst} link failed, try manual"
         exist 1
     fi
 }
 
-function file_copy() {
-    cp -f $1 $2
+function package_link() {
+    local name="$1"
+    local src="${sdir}/${name}"
+    if [ ! -z $2 ];then
+        src="$2"
+    fi
+    local dst="${xconf}/${name}"
+    if [ ! -z $3 ];then
+        dst="$3"
+    fi
+
+    if [ ! -d ${src} ];then
+        e_err "src(${src}) is not exist, exit"
+        return 1
+    fi
+    do_link ${src} ${dst}
 }
+
 
 function file_link() {
-    ln -sf $1 $2
+    local src="$1"
+    local dst="$2"
+
+    if [ ! -f $src ];then
+        return 1
+    fi
+    do_link $src $dst
 }
 
-function dir_copy() {
-    local dir1="$1"
-    local dir2="$2"
-    if [ ! -d ${dir2} ];then
-        mkdir -p ${dir2}
+function file_copy() {
+    local src="$1"
+    local dst="$2"
+
+    if [ ! -f $src ];then
+        return 1
     fi
-    cp -r ${dir1} ${dir2}
+    cp -f $src $dst
+}
+
+
+function dir_copy() {
+    local src="$1"
+    local dst="$2"
+
+    if [ -h $dst ];then
+        e_err "$dst is exist as link"
+    fi
+
+    if [ ! -d ${dst} ];then
+        mkdir -p ${dst}
+    fi
+    cp -r ${src} ${dst}
 }

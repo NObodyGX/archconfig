@@ -1,8 +1,9 @@
 #!/bin/bash
 
 pwd=$(cd $(dirname $0);pwd)
-pwdsw="${pwd}/software"
+sdir="${pwd}/software"
 xhome="${HOME}"
+xconf="${HOME}/.config"
 
 source "${pwd}/scripts/common.sh"
 source "${pwd}/scripts/software.sh"
@@ -13,6 +14,7 @@ function do_terminal_zsh() {
     package_install "fzf"
     package_install "fd"
     package_install "bat"
+    package_install "less"
 
     # check zsh is default
     local cmd=$(echo $SHELL)
@@ -26,13 +28,15 @@ function do_terminal_zsh() {
     fi
 
     # zinit install
-    if [ ! -f "${xhome}/.config/zsh/zinit/zinit.git/zinit.zsh" ];then
-        file_copy "${pwdsw}/zsh/.zshenv" "${xhome}/.zshenv"
-        file_copy "${pwdsw}/zsh/.zshrc" "${xhome}/.config/zsh/.zshrc"
+    file_link "${sdir}/zsh/.zshenv" "${xhome}/.zshenv"
+    file_link "${sdir}/zsh/.zshrc" "${xconf}/zsh/.zshrc"
+    if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ];then
         exec zsh
     else
         e_ok "installed zinit"
     fi
+    package_link "zsh/nobodygx" "${sdir}/zsh/nobodygx" "${xconf}/zsh/nobodygx"
+
     # zinit finish
 }
 
@@ -66,13 +70,14 @@ function try_mv() {
 }
 
 function do_user_files() {
-    local ff=${xhome}/.config/user-dirs.dirs
+    local ff=${xconf}/user-dirs.dirs
     local v=$(cat $ff | grep downloads)
     if [ -z $v ];then
         try_mv "Documents" "documents"
         try_mv "Downloads" "downloads"
         try_mv "Pictures" "pictures"
         try_mv "Public" "public"
+        try_mv "Music" "music"
         try_mv "Videos" "videos"
 
         echo "" > $ff
@@ -84,10 +89,9 @@ function do_user_files() {
         echo "XDG_MUSIC_DIR=\"\$HOME/music\"" >> $ff
         echo "XDG_PICTURES_DIR=\"\$HOME/pictures\"" >> $ff
         echo "XDG_VIDEOS_DIR=\"\$HOME/videos\"" >> $ff
-    else
-        e_ok "defined user-dirs"
-        return 0;
     fi
+    e_ok "defined user-dirs"
+    return 0;
 }
 
 function do_user_filemanager() {
@@ -99,6 +103,14 @@ function do_files() {
     e_title "files"
     do_user_files
     do_user_filemanager
+}
+
+function do_dev_software() {
+    e_title "dev"
+    package_install "rust"
+    package_install "go"
+    package_install "nvm"
+    package_install "anaconda"
 }
 
 
@@ -124,7 +136,10 @@ function do_software() {
     # disk
     package_install "filelight"
     # eyes
+    # work interval relax
     package_install "workrave"
+    # package_install "stretchly-bin"
+    # light adjust
     package_install "wluma"
 }
 
@@ -136,6 +151,7 @@ function main() {
 
     do_terminal
     do_files
+    do_dev_software
     do_software
     
     echo_rainbow "#==========   END   ==========#"
