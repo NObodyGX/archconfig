@@ -57,6 +57,13 @@ function do_terminal_alacritty() {
 
 function do_terminal_wezterm() {
     package_install "wezterm"
+    package_install "fish"
+    local dst="${xconf}/wezterm"
+    if [ ! -d $dst ];then
+        package_install "ttf-jetbrains-mono-nerd"
+        local url="https://github.com/KevinSilvester/wezterm-config.git"
+        git clone --depth=1 $url $dst
+    fi
 }
 
 function do_terminal_vim() {

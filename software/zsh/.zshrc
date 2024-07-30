@@ -29,3 +29,10 @@ export HISTSIZE=1000000000
 export SAVEHIST=1000000000
 setopt EXTENDED_HISTORY
 
+# keymap
+# see key u want: ``cat`` + ``enter`` + ``the-key``
+bindkey  "^[[H"   beginning-of-line
+bindkey  "^[[F"   end-of-line
+bindkey  "^[[3~"  delete-char
+# keymap end
+
