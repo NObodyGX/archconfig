@@ -83,6 +83,43 @@ function do_terminal() {
     do_terminal_vim
 }
 
+function try_add_text() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        touch $dst
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        echo $content >> $dst
+    fi
+}
+
+function try_add_text_sudo() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        sudo -u root -H sh -c "touch $dst"
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        sudo -u root -H sh -c "echo $content >> $dst"
+    fi
+}
+
+function do_input() {
+    package_install "fcitx5"
+    package_install "fcitx5-chinese-addons"
+    package_install "fcitx5-im" "fcitx5-qt"
+    package_install "fcitx5-configtool"
+    
+    try_add_text_sudo "GTK_IM_MODULE=fcitx5" "/etc/environment"
+    try_add_text_sudo "QT_IM_MODULE=fcitx5" "/etc/environment"
+    try_add_text_sudo "XMODIFIERS=@im=fcitx5" "/etc/environment"
+    try_add_text_sudo "INPUT_METHOD=fcitx5" "/etc/environment"
+    try_add_text_sudo "SDL_IM_MODULE=fcitx5" "/etc/environment"
+}
+
 function try_mv() {
     local p="${xhome}"
     if [ -d "${p}/$1" ];then
@@ -179,6 +216,7 @@ function main() {
     echo_rainbow "#==========   START   ==========#"
 
     do_terminal
+    do_input
     do_files
     do_dev_software
     do_software
