@@ -87,8 +87,8 @@ function do_terminal_vim() {
 }
 
 function do_terminal() {
-    print_title "terminal"
-    set_pkg_number 5
+    print_title "terminal" 5
+
     do_terminal_zsh
     do_terminal_foot
     do_terminal_alacritty
@@ -122,8 +122,7 @@ function do_input_method_env() {
 }
 
 function do_input_method() {
-    print_title "input_method"
-    set_pkg_number 2
+    print_title "input_method" 2
 
     do_input_method_fcitx
     do_input_method_env
@@ -160,8 +159,7 @@ function do_user_filemanager() {
 }
 
 function do_files() {
-    print_title "file manager"
-    set_pkg_number 2
+    print_title "file manager" 2
 
     do_user_filemanager
     do_user_files
@@ -192,8 +190,7 @@ function do_dev_conda() {
 }
 
 function do_dev() {
-    print_title "dev"
-    set_pkg_number 2
+    print_title "dev" 2
 
     do_dev_install
     do_dev_conda
@@ -247,8 +244,7 @@ function do_text_other() {
 }
 
 function do_text() {
-    print_title "text"
-    set_pkg_number 4
+    print_title "text" 4
     
     do_text_vscode
     do_text_pulsar
@@ -277,7 +273,7 @@ function write_firefox_css() {
 }
 
 function do_firefox() {
-    print_title "firefox"
+    print_sub_title "firefox"
 
     package_install "firefox"
 
@@ -290,12 +286,18 @@ function do_firefox() {
     done
 }
 
+function do_browser() {
+    print_title "browser" 1
+
+    do_firefox
+}
+
 function do_goldendict() {
     package_install "goldendict-ng-git"
 }
 
 function do_software() {
-    print_title "software"
+    print_title "software" 1
     # video
     package_install "vlc"
     package_install "mpv"
@@ -370,7 +372,8 @@ function do_disk_mount() {
     print_sub_title "mount disk"
 
     if ! check_todo_disk ;then
-        print_ok 'no need mount disk'
+        print_ok 'checked mount'
+        return 0
     fi
 
     local cmd=""
@@ -388,8 +391,7 @@ function do_disk_mount() {
 }
 
 function do_disk() {
-    print_title "didk"
-    set_pkg_number 1
+    print_title "didk" 1
 
     do_disk_mount
 }
@@ -397,18 +399,17 @@ function do_disk() {
 
 
 function main() {
-    echo_rainbow "#========== NObodyGX  ==========#"
-    echo_rainbow "#========== Arch Conf ==========#"
-    echo_rainbow "#==========   START   ==========#"
+    echo_rainbow "#========== NObodyGX ==========#"
+    echo_rainbow "#========== ArchConf ==========#"
+    echo_rainbow "#==========   START  ==========#"
     set_step_total 8
 
     do_terminal
     do_input_method
     do_files
-    do_firefox
+    do_browser
     do_dev
     do_software
-    # todo, add disk check in system
     do_disk
     echo_rainbow "#==========   END   ==========#"
 }

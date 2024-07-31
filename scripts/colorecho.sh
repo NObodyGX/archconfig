@@ -100,6 +100,9 @@ function print_title() {
     step_index=$((step_index+1))
     _print "b" "blue" "" "blue"
     local name="$1"
+    pkg_total="$2"
+    pkg_index=0
+
     i_echo "#======== [$step_index/$step_total] STEP $name ========#"
 }
 
@@ -108,11 +111,6 @@ function print_sub_title() {
     _print "b" "cyan" "" "cyan"
     local name="$1"
     i_echo "[$pkg_index/$pkg_total] install $name "
-}
-
-function set_pkg_number() {
-    pkg_total=$1
-    pkg_index=0
 }
 
 function print_ok() {
