@@ -110,13 +110,15 @@ function do_input_method_fcitx() {
 }
 
 function do_input_method_env() {
-    print_sub_title "write_env"
+    print_sub_title "write input env"
 
     try_add_text_sudo "GTK_IM_MODULE=fcitx5" "/etc/environment"
     try_add_text_sudo "QT_IM_MODULE=fcitx5" "/etc/environment"
     try_add_text_sudo "XMODIFIERS=@im=fcitx5" "/etc/environment"
     try_add_text_sudo "INPUT_METHOD=fcitx5" "/etc/environment"
     try_add_text_sudo "SDL_IM_MODULE=fcitx5" "/etc/environment"
+
+    print_ok "defined input env"
 }
 
 function do_input_method() {
@@ -177,7 +179,7 @@ function do_dev_install() {
     package_install "nvm"
 }
 
-function do_conda() {
+function do_dev_conda() {
     print_sub_title "conda"
 
     package_install "miniconda3"
@@ -189,11 +191,12 @@ function do_conda() {
     fi
 }
 
-function do_dev_software() {
+function do_dev() {
     print_title "dev"
+    set_pkg_number 2
 
     do_dev_install
-    do_conda
+    do_dev_conda
 }
 
 #============================================#
@@ -325,42 +328,70 @@ function do_software() {
 function write_fstab() {
     local diskname="$1"
     local mpoint="$2"
+    local cmd="" dtype="" duuid="" content="";
 
     if [ ! -d "$mpoint" ];then
         print_info "try create $mpoint"
         sudo_run "mkdir -p $mpoint"
     fi
 
-    local tmpf="/tmp/_tmp2.log"
-    local cmd=$(sudo -u root -H sh -c "lsblk -f" > $tmpf)
-    local dtype=$(grep "$diskname" $tmpf | awk '{print $2}')
-    local duuid=$(grep "$diskname" $tmpf | awk '{print $4}')
-    local content="UUID=$duuid   $mpoint   $dtype   defaults,noatime,nodiratime   0   0"
+    cmd=$(sudo_run "lsblk -f")
+    dtype=$(echo "$cmd" | grep "$diskname" | awk '{print $2}')
+    duuid=$(echo "$cmd" | grep "$diskname" | awk '{print $4}')
+    content="UUID=$duuid   $mpoint   $dtype   defaults,noatime,nodiratime   0   0"
+
     local dst="/etc/fstab"
+    sudo_run "echo '' >> $dst"
+    sudo_run "echo \# /dev/$diskname >> $dst"
+    sudo_run "echo $content >> $dst"
+    sudo_run "echo '' >> $dst"
+}
 
-    echo " " > $tmpf
-    echo "# /dev/$diskname" >> $tmpf
-    echo "$content" >> $tmpf
-
-    sudo_run "cat $tmpf >> $dst"
+function check_todo_disk() {
+    local cmd=""
+    cmd=$(sudo_run "lsblk -f")
+    if ! echo "$cmd" | grep -q "sda1" ;then
+        return 1
+    fi
+    if ! echo "$cmd" | grep -q "sdb1" ;then
+        return 2
+    fi
+    cmd=$(sudo_run "cat /etc/fstab")
+    if echo "$cmd" | grep -q "/dev/sda1" ;then
+        return 3
+    fi
+    if echo "$cmd" | grep -q "/dev/sdb1" ;then
+        return 4
+    fi
+    return 0
 }
 
 function do_disk_mount() {
-    # lsblk -f
-    # fdisk -l
-    local tmpf="/tmp/_tmp1.log"
-    local cmd
-    cmd=$(sudo -u root -H sh -c "cat /etc/fstab" > $tmpf)
-    if ! grep -q "/data" "$tmpf" ;then
+    print_sub_title "mount disk"
+
+    if ! check_todo_disk ;then
+        print_ok 'no need mount disk'
+    fi
+
+    local cmd=""
+    cmd=$(sudo_run "cat /etc/fstab")
+    if ! echo "$cmd" | grep -q "/data" ;then
         write_fstab "sda1" "/data"
     else
         print_ok 'mounted /data'
     fi
-    if grep -q "/code" "$tmpf";then
+    if ! echo "$cmd" | grep -q "/code" ;then
         write_fstab "sdb1" "/code"
     else
         print_ok 'mounted /code'
     fi
+}
+
+function do_disk() {
+    print_title "didk"
+    set_pkg_number 1
+
+    do_disk_mount
 }
 
 
@@ -375,10 +406,10 @@ function main() {
     do_input_method
     do_files
     do_firefox
-    do_dev_software
+    do_dev
     do_software
     # todo, add disk check in system
-    do_disk_mount
+    do_disk
     echo_rainbow "#==========   END   ==========#"
 }
 
