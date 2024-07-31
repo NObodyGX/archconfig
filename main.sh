@@ -1,11 +1,10 @@
 #!/bin/bash
 
-pwd=$(cd "$(dirname $0)" || exit;pwd)
+pwd=$(cd "$(dirname "$0")" || exit;pwd)
 sdir="${pwd}/software"
-xhome="${HOME}"
-xconf="${HOME}/.config"
+xhome="$HOME"
+xconf="${xhome}/.config"
 
-# shellcheck source=./scripts/colorecho.sh
 source "${pwd}/scripts/colorecho.sh"
 source "${pwd}/scripts/try.sh"
 
@@ -70,10 +69,10 @@ function do_terminal_wezterm() {
     package_install "wezterm"
     package_install "fish"
     local dst="${xconf}/wezterm"
-    if [ ! -d $dst ];then
+    if [ ! -d "$dst" ];then
         package_install "ttf-jetbrains-mono-nerd"
         local url="https://github.com/KevinSilvester/wezterm-config.git"
-        git clone --depth=1 $url $dst
+        git clone --depth=1 $url "$dst"
     fi
 }
 
@@ -137,8 +136,7 @@ function do_user_files() {
 
     local src="$pwd/system/user-dirs.dirs"
     local dst=${xconf}/user-dirs.dirs
-    local v=$(cat $dst | grep downloads)
-    if [ -z $v ];then
+    if ! grep -q "downloads" "$dst" ;then
         try_mv "Documents" "documents"
         try_mv "Downloads" "downloads"
         try_mv "Pictures" "pictures"
@@ -186,8 +184,8 @@ function do_conda() {
 
     local src="$sdir/conda/.condarc"
     local dst="$xhome/.condarc"
-    if [ ! -f $dst ];then
-        try_copy_file $sdir $xhome
+    if [ ! -f "$dst" ];then
+        try_copy_file "$sdir" "$dst"
     fi
 }
 
@@ -263,27 +261,28 @@ function write_firefox_css() {
     local tdir="$1"
     local src="$sdir/firefox/userChrome.css"
     local dst="$tdir/chrome/userChrome.css"
-    try_mkdir "$tdir/chrome"
-    if [ ! -f $dst ];then
-        try_copy_file $src $dst
+    local dstdir
+    dstdir=$(dirname "$dst")
+    try_mkdir "$dstdir"
+    if [ ! -f "$dst" ];then
+        try_copy_file "$src" "$dst"
     fi
 
-    if [ -f $dst ];then
+    if [ -f "$dst" ];then
         print_ok "Checked firefox userCss"
     fi
 }
 
 function do_firefox() {
     print_title "firefox"
+
     package_install "firefox"
+
     local src="${xhome}/.mozilla/firefox"
-    for item in $(ls -a $src); do
-        if [ -d "$src/$item" ];then
-            if [[ $item == *"default" ]];then
-                write_firefox_css $src/$item
-            elif [[ $item == *"default-release" ]];then
-                write_firefox_css $src/$item
-            fi
+    find "$src" -mindepth 1 -maxdepth 1 -type d | while read -r mdir
+    do
+        if [[ $mdir == *"default" || $mdir == *"default-release" ]];then
+            write_firefox_css "$mdir"
         fi
     done
 }
@@ -327,7 +326,7 @@ function write_fstab() {
     local diskname="$1"
     local mpoint="$2"
 
-    if [ ! -d $mpoint ];then
+    if [ ! -d "$mpoint" ];then
         print_info "try create $mpoint"
         sudo_run "mkdir -p $mpoint"
     fi
@@ -350,13 +349,14 @@ function do_disk_mount() {
     # lsblk -f
     # fdisk -l
     local tmpf="/tmp/_tmp1.log"
-    local cmd=$(sudo -u root -H sh -c "cat /etc/fstab" > $tmpf)
-    if [ -z "$(grep "/data" $tmpf)" ];then
+    local cmd
+    cmd=$(sudo -u root -H sh -c "cat /etc/fstab" > $tmpf)
+    if ! grep -q "/data" "$tmpf" ;then
         write_fstab "sda1" "/data"
     else
         print_ok 'mounted /data'
     fi
-    if [ -z "$(grep "/code" $tmpf)" ];then
+    if grep -q "/code" "$tmpf";then
         write_fstab "sdb1" "/code"
     else
         print_ok 'mounted /code'
@@ -369,8 +369,8 @@ function main() {
     echo_rainbow "#========== NObodyGX  ==========#"
     echo_rainbow "#========== Arch Conf ==========#"
     echo_rainbow "#==========   START   ==========#"
+    set_step_total 8
 
-    step_total=8
     do_terminal
     do_input_method
     do_files

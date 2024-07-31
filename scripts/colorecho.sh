@@ -85,6 +85,10 @@ step_total=99
 pkg_index=0
 pkg_total=99
 
+function set_step_total() {
+    step_total="$1"
+}
+
 function _print() {
     get_cstyle "$1"
     get_ccode "$2"

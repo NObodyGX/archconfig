@@ -1,27 +1,41 @@
 #!/bin/bash
 
+#=============== env =================#
+if [ -z "$xhome" ];then
+    xhome="$HOME"
+fi
+if [ -z "$xconf" ];then
+    xconf="${xhome}/.config"
+fi
+if [ -z "$pwd" ];then
+    pwd=$(cd "$(dirname "$0")" || exit;pwd)
+fi
+if [ -z "$sdir" ];then
+    sdir="$pwd/../software"
+fi
 aur="yay "
+#=============== env =================#
 
 function try_link() {
     local src="$1"
     local dst="$2"
 
-    if [ -h ${dst} ];then
+    if [ -h "$dst" ];then
         print_ok "linked ${dst}"
         return 0
     fi
 
-    if [ -d ${dst} ];then
+    if [ -d "$dst" ];then
         print_info "delete dir: ${dst}"
-        rm -rf ${dst}
-    elif [ -f ${dst} ];then
+        rm -rf "${dst}"
+    elif [ -f "${dst}" ];then
         print_info "delete file: ${dst}"
-        rm -f ${dst}
+        rm -f "${dst}"
     fi
 
     print_info "${src} ====> ${dst}"
-    ln -s ${src} ${dst}
-    if [ -h ${dst} ];then
+    ln -s "${src}" "${dst}"
+    if [ -h "${dst}" ];then
         print_ok "linked ${dst}"
         return 0
     else
@@ -34,40 +48,40 @@ function try_link_file() {
     local src="$1"
     local dst="$2"
 
-    if [ ! -f $src ];then
+    if [ ! -f "$src" ];then
         return 1
     fi
-    try_link $src $dst
+    try_link "$src" "$dst"
 }
 
 function try_copy_file() {
     local src="$1"
     local dst="$2"
 
-    if [ ! -f $src ];then
+    if [ ! -f "$src" ];then
         return 1
     fi
-    cp -f $src $dst
+    cp -f "$src" "$dst"
 }
 
 function try_copy_dir() {
     local src="$1"
     local dst="$2"
 
-    if [ -h $dst ];then
+    if [ -h "$dst" ];then
         print_err "$dst is exist as link"
     fi
 
-    if [ ! -d ${dst} ];then
-        mkdir -p ${dst}
+    if [ ! -d  "$dst"  ];then
+        mkdir -p  "$dst" 
     fi
-    cp -r ${src} ${dst}
+    cp -r "$src" "$dst" 
 }
 
 function try_mkdir() {
     local dst="$1"
-    if [ ! -d "${dst}" ];then
-        mkdir -p "${dst}"
+    if [ ! -d "$dst" ];then
+        mkdir -p "$dst"
     fi
 }
 
@@ -78,23 +92,21 @@ function sudo_run() {
 function try_add_text() {
     local content="$1"
     local dst="$2"
-    if [ ! -f ${dst} ];then
-        echo "" > $dst
+    if [ ! -f "$dst" ];then
+        echo "" > "$dst"
     fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
-        echo $content >> $dst
+    if ! grep -q "$content" "$dst" ;then
+        echo "$content" >> "$dst"
     fi
 }
 
 function try_add_text_sudo() {
     local content="$1"
     local dst="$2"
-    if [ ! -f ${dst} ];then
+    if [ ! -f "$dst" ];then
         sudo_run "touch $dst"
     fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
+    if ! grep -q "$content" "$dst" ;then
         sudo_run "echo $content >> $dst"
     fi
 }
@@ -107,7 +119,8 @@ function try_mv() {
 }
 
 function package_check() {
-    local cmd=$($aur -Q $1)
+    local cmd
+    cmd=$($aur -Q "$1")
     if [ -z "${cmd}" ];then
         return 1;
     fi
@@ -117,36 +130,36 @@ function package_check() {
 function package_install() {
     local pkg="$1"
     local pname="$2"
-    if [ -z $pname ];then
+    if [ -z "$pname" ];then
         pname=$pkg
     fi
 
-    if ! package_check "${pname}" ;then
-        print_info "start install ${pkg}"
-        $aur -S ${pkg} --noconfirm --quiet >/dev/null 2>&1
+    if ! package_check "$pname" ;then
+        print_info "start install $pkg"
+        $aur -S "$pkg" --noconfirm --quiet >/dev/null 2>&1
     fi
-    if ! package_check "${pname}" ;then
+    if ! package_check "$pname" ;then
         print_err "install ${pkg}. try manual..."
         return 1;
     fi
-    print_ok "installed ${pkg} "
+    print_ok "installed $pkg"
 }
 
 function package_link() {
     local name="$1"
     local src="${sdir}/${name}"
-    if [ ! -z $2 ];then
+    if [ -n "$2" ];then
         src="$2"
     fi
     local dst="${xconf}/${name}"
-    if [ ! -z $3 ];then
+    if [ -n "$3" ];then
         dst="$3"
     fi
 
-    if [ ! -d ${src} ];then
+    if [ ! -d "$src" ];then
         print_err "src(${src}) is not exist, exit"
         return 1
     fi
-    try_link ${src} ${dst}
+    try_link "$src" "$dst"
     print_ok "linked $src ==> $dst"
 }
