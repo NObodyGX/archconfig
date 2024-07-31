@@ -182,8 +182,14 @@ function do_dev_conda() {
 
     package_install "miniconda3"
 
-    local src="$sdir/conda/.condarc"
-    local dst="$xhome/.condarc"
+    local src="${sdir}/conda/.condarc"
+    local dst="${xhome}/.condarc"
+    if [ ! -f "$dst" ];then
+        try_copy_file "$sdir" "$dst"
+    fi
+
+    src="${sdir}/conda/pip.conf"
+    dst="${xconf}/pip/pip.conf"
     if [ ! -f "$dst" ];then
         try_copy_file "$sdir" "$dst"
     fi
