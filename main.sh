@@ -325,6 +325,8 @@ function do_software() {
     # package_install "stretchly-bin"
     # light adjust
     package_install "wluma"
+    # other
+    package_install "tree"
 
     do_goldendict
 }
