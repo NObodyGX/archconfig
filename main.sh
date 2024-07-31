@@ -5,51 +5,12 @@ sdir="${pwd}/software"
 xhome="${HOME}"
 xconf="${HOME}/.config"
 
-source "${pwd}/scripts/common.sh"
-source "${pwd}/scripts/software.sh"
-
-function sudo_run() {
-    sudo -u root -H sh -c "$1"
-}
-
-function try_add_text() {
-    local content="$1"
-    local dst="$2"
-    if [ ! -f ${dst} ];then
-        echo "" > $dst
-    fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
-        echo $content >> $dst
-    fi
-}
-
-function try_add_text_sudo() {
-    local content="$1"
-    local dst="$2"
-    if [ ! -f ${dst} ];then
-        sudo_run "touch $dst"
-    fi
-    local cmd=$(cat $dst | grep $content)
-    if [ -z $cmd ];then
-        sudo_run "echo $content >> $dst"
-    fi
-}
-
-function try_mv() {
-    local p="${xhome}"
-    if [ -d "${p}/$1" ];then
-        mv "${p}/$1" "${p}/$2"
-    fi
-}
-
-function do_env_check() {
-    # check sudo
-    e_title "check env"
-    e_ok "checked env"
-}
+source "${pwd}/scripts/colorecho.sh"
+source "${pwd}/scripts/try.sh"
 
 function do_terminal_zsh() {
+    print_package "zsh"
+
     package_install "zsh"
     package_install "fzf"
     package_install "fd"
@@ -59,24 +20,23 @@ function do_terminal_zsh() {
     # check zsh is default
     local cmd=$(echo $SHELL)
     if [[ $cmd == *"zsh" ]];then
-        e_ok "defaulted zsh"
+        print_ok2 "defaulted zsh"
     else
-        e_warn "zsh is not default shell"
+        print_warn2 "zsh is not default shell"
         chsh -s $(which zsh)
-        e_info "you should reboot system and go on..."
+        print_info2 "you should reboot system and go on..."
         exit 0
     fi
 
     # zinit install
-    file_link "${sdir}/zsh/.zshenv" "${xhome}/.zshenv"
-    file_link "${sdir}/zsh/.zshrc" "${xconf}/zsh/.zshrc"
+    try_link_file "${sdir}/zsh/.zshenv" "${xhome}/.zshenv"
+    try_link_file "${sdir}/zsh/.zshrc" "${xconf}/zsh/.zshrc"
     if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ];then
         exec zsh
     else
         e_ok "installed zinit"
     fi
     package_link "zsh/nobodygx" "${sdir}/zsh/nobodygx" "${xconf}/zsh/nobodygx"
-
     # zinit finish
 }
 
@@ -111,11 +71,12 @@ function do_terminal_vim() {
     try_mkdir "${xconf}/vim"
 
     package_link "vim/color" "${sdir}/vim/colors" "${xconf}/vim/colors"
-    file_link "${sdir}/vim/vimrc" "${xconf}/vim/vimrc"
+    try_link_file "${sdir}/vim/vimrc" "${xconf}/vim/vimrc"
 }
 
 function do_terminal() {
-    e_title "terminal"
+    print_step "terminal"
+    pkg_total=5
     do_terminal_zsh
     do_terminal_foot
     do_terminal_alacritty
@@ -190,38 +151,25 @@ function do_text_vscode() {
     package_install "vscodium-bin-features"
     package_install "vscodium-bin-marketplace"
 
-    file_copy "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
+    try_copy_file "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
 }
 
 function do_text_pulsar() {
     package_install "pulsar-bin"
-    file_copy "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
+    
+    try_copy_file "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
 }
 
 function write_firefox_css() {
-    local src="$1"
-    try_mkdir "$src/chrome"
-    local filename="$src/chrome/userChrome.css"
-    if [ ! -f $filename ];then
-        cat>"${filename}"<<EOF
-/*隐藏分页标签*/
-#TabsToolbar { visibility: collapse !important; }
-/*动态隐藏书签列*/
-:root:not([customizing]) #PersonalToolbar {
-max-height: 0 !important;
-min-height: 0.1px !important;
-opacity: 0;
-transition: opacity 0.15s ease-in !important;
-}
-:root:not([customizing]) :hover > #PersonalToolbar,
-:root:not([customizing]) #navigator-toolbox:focus-within #PersonalToolbar {
-max-height: 4em !important;
-opacity: 1;
-}
-EOF
+    local tdir="$1"
+    local src="$sdir/firefox/userChrome.css"
+    local dst="$tdir/chrome/userChrome.css"
+    try_mkdir "$tdir/chrome"
+    if [ ! -f $dst ];then
+        try_copy_file $src $dst
     fi
 
-    if [ -f $filename ];then
+    if [ -f $dst ];then
         e_ok "Checked firefox userCss"
     fi
 }
@@ -320,24 +268,10 @@ function do_disk_mount() {
 function do_conda() {
     package_install "miniconda3"
 
-    local filename="$xhome/.condarc"
-    if [ ! -f $filename ];then
-        cat>"${filename}"<<EOF
-channels:
-  - defaults
-show_channel_urls: true
-default_channels:
-  - http://mirrors.aliyun.com/anaconda/pkgs/main
-  - http://mirrors.aliyun.com/anaconda/pkgs/r
-  - http://mirrors.aliyun.com/anaconda/pkgs/msys2
-custom_channels:
-  conda-forge: http://mirrors.aliyun.com/anaconda/cloud
-  msys2: http://mirrors.aliyun.com/anaconda/cloud
-  bioconda: http://mirrors.aliyun.com/anaconda/cloud
-  menpo: http://mirrors.aliyun.com/anaconda/cloud
-  pytorch: http://mirrors.aliyun.com/anaconda/cloud
-  simpleitk: http://mirrors.aliyun.com/anaconda/cloud
-EOF
+    local src="$sdir/conda/.condarc"
+    local dst="$xhome/.condarc"
+    if [ ! -f $dst ];then
+        try_copy_file $sdir $xhome
     fi
 }
 
@@ -346,7 +280,7 @@ function main() {
     echo_rainbow "#========== Arch Conf ==========#"
     echo_rainbow "#==========   START   ==========#"
 
-    do_env_check
+    step_total=8
     do_terminal
     do_input
     do_files

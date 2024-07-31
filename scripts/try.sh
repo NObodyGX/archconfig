@@ -1,0 +1,152 @@
+#!/bin/bash
+
+aur="yay "
+
+function try_link() {
+    local src="$1"
+    local dst="$2"
+
+    if [ -h ${dst} ];then
+        e_ok "linked ${dst}"
+        return 0
+    fi
+
+    if [ -d ${dst} ];then
+        e_info "delete dir: ${dst}"
+        rm -rf ${dst}
+    elif [ -f ${dst} ];then
+        e_info "delete file: ${dst}"
+        rm -f ${dst}
+    fi
+
+    e_info "${src} ====> ${dst}"
+    ln -s ${src} ${dst}
+    if [ -h ${dst} ];then
+        e_ok "linked ${dst}"
+        return 0
+    else
+        e_err "${dst} link failed, try manual"
+        exist 1
+    fi
+}
+
+function try_link_file() {
+    local src="$1"
+    local dst="$2"
+
+    if [ ! -f $src ];then
+        return 1
+    fi
+    try_link $src $dst
+}
+
+function try_copy_file() {
+    local src="$1"
+    local dst="$2"
+
+    if [ ! -f $src ];then
+        return 1
+    fi
+    cp -f $src $dst
+}
+
+function try_copy_dir() {
+    local src="$1"
+    local dst="$2"
+
+    if [ -h $dst ];then
+        e_err "$dst is exist as link"
+    fi
+
+    if [ ! -d ${dst} ];then
+        mkdir -p ${dst}
+    fi
+    cp -r ${src} ${dst}
+}
+
+function try_mkdir() {
+    local dst="$1"
+    if [ ! -d "${dst}" ];then
+        mkdir -p "${dst}"
+    fi
+}
+
+function sudo_run() {
+    sudo -u root -H sh -c "$1"
+}
+
+function try_add_text() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        echo "" > $dst
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        echo $content >> $dst
+    fi
+}
+
+function try_add_text_sudo() {
+    local content="$1"
+    local dst="$2"
+    if [ ! -f ${dst} ];then
+        sudo_run "touch $dst"
+    fi
+    local cmd=$(cat $dst | grep $content)
+    if [ -z $cmd ];then
+        sudo_run "echo $content >> $dst"
+    fi
+}
+
+function try_mv() {
+    local p="${xhome}"
+    if [ -d "${p}/$1" ];then
+        mv "${p}/$1" "${p}/$2"
+    fi
+}
+
+function package_check() {
+    local cmd=$($aur -Q $1)
+    if [ -z "${cmd}" ];then
+        return 1;
+    fi
+    return 0;
+}
+
+function package_install() {
+    local pkg="$1"
+    local pname="$2"
+    if [ -z $pname ];then
+        pname=$pkg
+    fi
+
+    if ! package_check "${pname}" ;then
+        print_info2 "start install ${pkg}"
+        $aur -S ${pkg} --noconfirm --quiet >/dev/null 2>&1
+    fi
+    if ! package_check "${pname}" ;then
+        print_err2 "install ${pkg}. try manual..."
+        return 1;
+    fi
+    print_ok2 "installed ${pkg} "
+}
+
+function package_link() {
+    local name="$1"
+    local src="${sdir}/${name}"
+    if [ ! -z $2 ];then
+        src="$2"
+    fi
+    local dst="${xconf}/${name}"
+    if [ ! -z $3 ];then
+        dst="$3"
+    fi
+
+    if [ ! -d ${src} ];then
+        print_err2 "src(${src}) is not exist, exit"
+        return 1
+    fi
+    try_link ${src} ${dst}
+    print_ok2 "linked $(src) ==> $(dst)"
+}

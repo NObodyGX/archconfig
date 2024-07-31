@@ -77,12 +77,93 @@ function echo_rainbow() {
 }
 #=============================================
 
+
+
+#================= index count ===============
+step_index=0
+step_total=99
+pkg_index=0
+pkg_total=99
+
+function _print() {
+    get_cstyle "$1"
+    get_ccode "$2"
+    i_echo_nowarp "$3"
+    get_ccode "$4"
+}
+
+function print_step() {
+    step_index=$(($step_index+1))
+    _print "b" "blue" "" "blue"
+    local name="$1"
+    i_echo "#======== [$step_index/$step_total] STEP $name #========"
+}
+
+function print_package() {
+    pkg_index=$(($pkg_index+1))
+    _print "b" "cyan" "" "cyan"
+    local name="$1"
+    i_echo "[$pkg_index/$pkg_total] install $name "
+}
+
+function print_ok() {
+    _print "" "green" "✅  " "white"
+    i_echo $*
+}
+function print_ok1() {
+    _print "" "green" "  ✅  " "white"
+    i_echo $*
+}
+function print_ok2() {
+    _print "" "green" "    ✅  " "white"
+    i_echo $*
+}
+
+function print_err() {
+    _print "" "red" "⛔ " "white"
+    i_echo $*
+}
+function print_err1() {
+    _print "" "red" "  ⛔ " "white"
+    i_echo $*
+}
+function print_err2() {
+    _print "" "red" "    ⛔ " "white"
+    i_echo $*
+}
+
+function print_info2() {
+    _print "" "white" "    [info] " "white"
+    i_echo $*
+}
+
+function print_warn2() {
+    _print "" "yellow" "    [warn] " "yellow"
+    i_echo $*
+}
+
+function print_e() {
+    print_ok "aaa"
+    print_ok1 "aaa"
+    print_ok1 "aab"
+    print_ok2 "aaa"
+    print_info2 "aaa"
+    print_ok2 "aab"
+
+    print_err "aaa"
+    print_err1 "aaa"
+    print_err1 "aaa"
+    print_err2 "aaa"
+}
+
+
 #================= echo color  ===============
 function e_title() {
     get_cstyle "b"
     get_ccode "cyan"
     i_echo "********" $* "********"
 }
+
 #================= echo normal ===============
 function _e_print() {
     get_cstyle ""

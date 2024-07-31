@@ -1,0 +1,15 @@
+
+/*隐藏分页标签*/
+#TabsToolbar { visibility: collapse !important; }
+/*动态隐藏书签列*/
+:root:not([customizing]) #PersonalToolbar {
+    max-height: 0 !important;
+    min-height: 0.1px !important;
+    opacity: 0;
+    transition: opacity 0.15s ease-in !important;
+}
+:root:not([customizing]) :hover > #PersonalToolbar,
+:root:not([customizing]) #navigator-toolbox:focus-within #PersonalToolbar {
+    max-height: 4em !important;
+    opacity: 1;
+}
