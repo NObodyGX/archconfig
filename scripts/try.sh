@@ -7,25 +7,25 @@ function try_link() {
     local dst="$2"
 
     if [ -h ${dst} ];then
-        e_ok "linked ${dst}"
+        print_ok "linked ${dst}"
         return 0
     fi
 
     if [ -d ${dst} ];then
-        e_info "delete dir: ${dst}"
+        print_info "delete dir: ${dst}"
         rm -rf ${dst}
     elif [ -f ${dst} ];then
-        e_info "delete file: ${dst}"
+        print_info "delete file: ${dst}"
         rm -f ${dst}
     fi
 
-    e_info "${src} ====> ${dst}"
+    print_info "${src} ====> ${dst}"
     ln -s ${src} ${dst}
     if [ -h ${dst} ];then
-        e_ok "linked ${dst}"
+        print_ok "linked ${dst}"
         return 0
     else
-        e_err "${dst} link failed, try manual"
+        print_err "${dst} link failed, try manual"
         exist 1
     fi
 }
@@ -55,7 +55,7 @@ function try_copy_dir() {
     local dst="$2"
 
     if [ -h $dst ];then
-        e_err "$dst is exist as link"
+        print_err "$dst is exist as link"
     fi
 
     if [ ! -d ${dst} ];then
@@ -122,14 +122,14 @@ function package_install() {
     fi
 
     if ! package_check "${pname}" ;then
-        print_info2 "start install ${pkg}"
+        print_info "start install ${pkg}"
         $aur -S ${pkg} --noconfirm --quiet >/dev/null 2>&1
     fi
     if ! package_check "${pname}" ;then
-        print_err2 "install ${pkg}. try manual..."
+        print_err "install ${pkg}. try manual..."
         return 1;
     fi
-    print_ok2 "installed ${pkg} "
+    print_ok "installed ${pkg} "
 }
 
 function package_link() {
@@ -144,9 +144,9 @@ function package_link() {
     fi
 
     if [ ! -d ${src} ];then
-        print_err2 "src(${src}) is not exist, exit"
+        print_err "src(${src}) is not exist, exit"
         return 1
     fi
     try_link ${src} ${dst}
-    print_ok2 "linked $(src) ==> $(dst)"
+    print_ok "linked $src ==> $dst"
 }

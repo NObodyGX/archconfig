@@ -1,15 +1,20 @@
 #!/bin/bash
 
-pwd=$(cd $(dirname $0);pwd)
+pwd=$(cd "$(dirname $0)" || exit;pwd)
 sdir="${pwd}/software"
 xhome="${HOME}"
 xconf="${HOME}/.config"
 
+# shellcheck source=./scripts/colorecho.sh
 source "${pwd}/scripts/colorecho.sh"
 source "${pwd}/scripts/try.sh"
 
+#============================================#
+#                  Terminal                  #
+#============================================#
+
 function do_terminal_zsh() {
-    print_package "zsh"
+    print_sub_title "zsh"
 
     package_install "zsh"
     package_install "fzf"
@@ -18,13 +23,13 @@ function do_terminal_zsh() {
     package_install "less"
 
     # check zsh is default
-    local cmd=$(echo $SHELL)
+    local cmd="$SHELL"
     if [[ $cmd == *"zsh" ]];then
-        print_ok2 "defaulted zsh"
+        print_ok "defaulted zsh"
     else
-        print_warn2 "zsh is not default shell"
-        chsh -s $(which zsh)
-        print_info2 "you should reboot system and go on..."
+        print_warn "zsh is not default shell"
+        chsh -s "$(which zsh)"
+        print_info "you should reboot system and go on..."
         exit 0
     fi
 
@@ -34,13 +39,15 @@ function do_terminal_zsh() {
     if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ];then
         exec zsh
     else
-        e_ok "installed zinit"
+        print_ok "installed zinit"
     fi
     package_link "zsh/nobodygx" "${sdir}/zsh/nobodygx" "${xconf}/zsh/nobodygx"
     # zinit finish
 }
 
 function do_terminal_foot() {
+    print_sub_title "foot"
+
     package_install "ttf-maple-sc-nerd"
     package_install "foot"
     package_install "lsix"
@@ -49,6 +56,8 @@ function do_terminal_foot() {
 }
 
 function do_terminal_alacritty() {
+    print_sub_title "alacritty"
+
     package_install "ttf-maple-sc-nerd"
     package_install "alacritty"
 
@@ -56,6 +65,8 @@ function do_terminal_alacritty() {
 }
 
 function do_terminal_wezterm() {
+    print_sub_title "wezterm"
+
     package_install "wezterm"
     package_install "fish"
     local dst="${xconf}/wezterm"
@@ -67,6 +78,8 @@ function do_terminal_wezterm() {
 }
 
 function do_terminal_vim() {
+    print_sub_title "vim"
+
     package_install "vim"
     try_mkdir "${xconf}/vim"
 
@@ -75,8 +88,8 @@ function do_terminal_vim() {
 }
 
 function do_terminal() {
-    print_step "terminal"
-    pkg_total=5
+    print_title "terminal"
+    set_pkg_number 5
     do_terminal_zsh
     do_terminal_foot
     do_terminal_alacritty
@@ -84,27 +97,47 @@ function do_terminal() {
     do_terminal_vim
 }
 
+#============================================#
+#                Input Method                #
+#============================================#
 
-function do_input() {
-    e_title "input_method"
+function do_input_method_fcitx() {
+    print_sub_title "fcitx5"
+
     package_install "fcitx5"
     package_install "fcitx5-chinese-addons"
     package_install "fcitx5-im" "fcitx5-qt"
     package_install "fcitx5-configtool"
-    
+}
+
+function do_input_method_env() {
+    print_sub_title "write_env"
+
     try_add_text_sudo "GTK_IM_MODULE=fcitx5" "/etc/environment"
     try_add_text_sudo "QT_IM_MODULE=fcitx5" "/etc/environment"
     try_add_text_sudo "XMODIFIERS=@im=fcitx5" "/etc/environment"
     try_add_text_sudo "INPUT_METHOD=fcitx5" "/etc/environment"
     try_add_text_sudo "SDL_IM_MODULE=fcitx5" "/etc/environment"
-    e_ok "installed fcitx5"
 }
 
+function do_input_method() {
+    print_title "input_method"
+    set_pkg_number 2
 
+    do_input_method_fcitx
+    do_input_method_env
+}
+
+#============================================#
+#                 User Files                 #
+#============================================#
 
 function do_user_files() {
-    local ff=${xconf}/user-dirs.dirs
-    local v=$(cat $ff | grep downloads)
+    print_sub_title "config user-dirs"
+
+    local src="$pwd/system/user-dirs.dirs"
+    local dst=${xconf}/user-dirs.dirs
+    local v=$(cat $dst | grep downloads)
     if [ -z $v ];then
         try_mv "Documents" "documents"
         try_mv "Downloads" "downloads"
@@ -112,53 +145,119 @@ function do_user_files() {
         try_mv "Public" "public"
         try_mv "Music" "music"
         try_mv "Videos" "videos"
-
-        echo "" > $ff
-        echo "XDG_DESKTOP_DIR=\"\$HOME/Desktop\"" >> $ff
-        echo "XDG_DOWNLOAD_DIR=\"\$HOME/downloads\"" >> $ff
-        echo "XDG_TEMPLATES_DIR=\"\$HOME/Templates\"" >> $ff
-        echo "XDG_PUBLICSHARE_DIR=\"\$HOME/public\"" >> $ff
-        echo "XDG_DOCUMENTS_DIR=\"\$HOME/documents\"" >> $ff
-        echo "XDG_MUSIC_DIR=\"\$HOME/music\"" >> $ff
-        echo "XDG_PICTURES_DIR=\"\$HOME/pictures\"" >> $ff
-        echo "XDG_VIDEOS_DIR=\"\$HOME/videos\"" >> $ff
+        
+        try_copy_file "$src" "$dst"
     fi
-    e_ok "defined user-dirs"
+    print_ok "defined user-dirs"
     return 0;
 }
 
 function do_user_filemanager() {
+    print_sub_title "install_fm"
+
     package_install "yazi"
     package_install "superfile"
 }
 
 function do_files() {
-    e_title "files"
-    do_user_files
+    print_title "file manager"
+    set_pkg_number 2
+
     do_user_filemanager
+    do_user_files
 }
 
-function do_dev_software() {
-    e_title "dev"
+#============================================#
+#               Develop Tools                #
+#============================================#
+
+function do_dev_install() {
+    print_sub_title "dev"
+
     package_install "rust"
     package_install "go"
     package_install "nvm"
+}
+
+function do_conda() {
+    print_sub_title "conda"
+
+    package_install "miniconda3"
+
+    local src="$sdir/conda/.condarc"
+    local dst="$xhome/.condarc"
+    if [ ! -f $dst ];then
+        try_copy_file $sdir $xhome
+    fi
+}
+
+function do_dev_software() {
+    print_title "dev"
+
+    do_dev_install
     do_conda
 }
 
+#============================================#
+#                   Text                     #
+#============================================#
+
 function do_text_vscode() {
+    print_sub_title "vscode"
+
     package_install "vscodium-bin"
     package_install "vscodium-bin-features"
-    package_install "vscodium-bin-marketplace"
+    # package_install "vscodium-bin-marketplace"
 
     try_copy_file "${sdir}/vscode/User/settings.json" "${xconf}/VSCodium/User/settings.json"
 }
 
 function do_text_pulsar() {
+    print_sub_title "pulsar"
+
     package_install "pulsar-bin"
     
     try_copy_file "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
 }
+
+function do_text_helix() {
+    print_sub_title "pulsar"
+
+    package_install "helix"
+
+    local src="/usr/bin/helix"
+    local dst="/usr/bin/vi"
+    if [ ! -h "$dst" ];then
+        print_info "start link $src ==> $dst"
+        sudo_run "ln -s $src $dst"
+    fi
+
+    if [ -h $dst ];then
+        print_ok "link vi"
+    else
+        print_err "link vi err, try manul"
+    fi
+}
+function do_text_other() {
+    print_sub_title "text other"
+
+    package_install "lapce"
+    package_install "gedit"
+}
+
+function do_text() {
+    print_title "text"
+    set_pkg_number 4
+    
+    do_text_vscode
+    do_text_pulsar
+    do_text_helix
+    do_text_other
+}
+
+#============================================#
+#                   Browser                  #
+#============================================#
 
 function write_firefox_css() {
     local tdir="$1"
@@ -170,12 +269,12 @@ function write_firefox_css() {
     fi
 
     if [ -f $dst ];then
-        e_ok "Checked firefox userCss"
+        print_ok "Checked firefox userCss"
     fi
 }
 
 function do_firefox() {
-    e_title "firefox"
+    print_title "firefox"
     package_install "firefox"
     local src="${xhome}/.mozilla/firefox"
     for item in $(ls -a $src); do
@@ -194,7 +293,7 @@ function do_goldendict() {
 }
 
 function do_software() {
-    e_title "software"
+    print_title "software"
     # video
     package_install "vlc"
     package_install "mpv"
@@ -206,11 +305,6 @@ function do_software() {
     package_install "feh"
     package_install "krita"
     package_install "gimp"
-    # text
-    do_text_vscode
-    do_text_pulsar
-    package_install "lapce"
-    package_install "helix"
     # dev
     package_install "insomnia"
     # disk
@@ -225,12 +319,16 @@ function do_software() {
     do_goldendict
 }
 
+#============================================#
+#                    Disk                    #
+#============================================#
+
 function write_fstab() {
     local diskname="$1"
     local mpoint="$2"
 
     if [ ! -d $mpoint ];then
-        e_info "try create $mpoint"
+        print_info "try create $mpoint"
         sudo_run "mkdir -p $mpoint"
     fi
 
@@ -256,24 +354,16 @@ function do_disk_mount() {
     if [ -z "$(grep "/data" $tmpf)" ];then
         write_fstab "sda1" "/data"
     else
-        e_ok 'mounted /data'
+        print_ok 'mounted /data'
     fi
     if [ -z "$(grep "/code" $tmpf)" ];then
         write_fstab "sdb1" "/code"
     else
-        e_ok 'mounted /code'
+        print_ok 'mounted /code'
     fi
 }
 
-function do_conda() {
-    package_install "miniconda3"
 
-    local src="$sdir/conda/.condarc"
-    local dst="$xhome/.condarc"
-    if [ ! -f $dst ];then
-        try_copy_file $sdir $xhome
-    fi
-}
 
 function main() {
     echo_rainbow "#========== NObodyGX  ==========#"
@@ -282,7 +372,7 @@ function main() {
 
     step_total=8
     do_terminal
-    do_input
+    do_input_method
     do_files
     do_firefox
     do_dev_software
