@@ -172,6 +172,7 @@ function do_files() {
 function do_dev_install() {
     print_sub_title "dev"
 
+    package_install "cmake"
     package_install "rust"
     package_install "go"
     package_install "nvm"
@@ -222,12 +223,20 @@ function do_dev_ollama() {
     sudo_run "systemctl start ollama"
 }
 
+function do_dev_cudn() {
+    print_sub_title "cudn"
+
+    package_install "cuda"
+    package_install "cudnn"
+}
+
 function do_dev() {
-    print_title "dev" 3
+    print_title "dev" 4
 
     do_dev_install
     do_dev_conda
     do_dev_ollama
+    do_dev_cudn
 }
 
 #============================================#
@@ -342,6 +351,8 @@ function do_software_system() {
     package_install "tree"
     # for genisoimage/isovfy
     package_install "cdrtools"
+    # bc
+    package_install "bc"
 }
 
 function do_software() {
