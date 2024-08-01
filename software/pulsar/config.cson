@@ -14,6 +14,7 @@
     preferredLineLength: 8000
     scrollPastEnd: true
     showInvisibles: true
+    softWrap: true
   "exception-reporting":
     userId: "cf553f45-7a0d-4dab-9f83-749a3917575a"
   welcome:

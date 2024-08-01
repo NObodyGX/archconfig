@@ -292,14 +292,28 @@ function do_firefox() {
     done
 }
 
+function do_browser_fdm() {
+    print_sub_title "freedownloadmanager"
+
+    package_install "freedownloadmanager"
+}
+
 function do_browser() {
-    print_title "browser" 1
+    print_title "browser" 2
 
     do_firefox
+    do_fdm
 }
 
 function do_goldendict() {
     package_install "goldendict-ng-git"
+}
+
+function do_software_system() {
+    # for tree
+    package_install "tree"
+    # for genisoimage/isovfy
+    package_install "cdrtools"
 }
 
 function do_software() {
@@ -326,7 +340,7 @@ function do_software() {
     # light adjust
     package_install "wluma"
     # other
-    package_install "tree"
+    
 
     do_goldendict
 }
