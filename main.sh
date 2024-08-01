@@ -195,11 +195,39 @@ function do_dev_conda() {
     fi
 }
 
+function do_dev_ollama() {
+    print_sub_title "ollama"
+
+    package_install "ollama"
+
+    local src="${sdir}/ollama/ollama.service"
+    local dst="/etc/systemd/system/ollama.service"
+    # add user
+    if ! id -u "ollama" >/dev/null 2>&1; then
+        sudo_run "useradd -r -s /bin/false -m -d /usr/share/ollama ollama"
+    fi
+    if id -u "ollama" >/dev/null 2>&1; then
+        print_ok "installed user(ollama)"
+    else
+        print_err "add user(ollama)"
+    fi
+    # add ollama.service
+    if [ ! -f "$dst" ];then
+        sudo_run "cp $src $dst"
+    fi
+    if [ -f "$dst" ];then
+        print_ok "installed ollama.service"
+    fi
+
+    sudo_run "systemctl start ollama"
+}
+
 function do_dev() {
-    print_title "dev" 2
+    print_title "dev" 3
 
     do_dev_install
     do_dev_conda
+    do_dev_ollama
 }
 
 #============================================#
@@ -278,7 +306,7 @@ function write_firefox_css() {
     fi
 }
 
-function do_firefox() {
+function do_browser_firefox() {
     print_sub_title "firefox"
 
     package_install "firefox"
@@ -301,8 +329,8 @@ function do_browser_fdm() {
 function do_browser() {
     print_title "browser" 2
 
-    do_firefox
-    do_fdm
+    do_browser_firefox
+    do_browser_fdm
 }
 
 function do_goldendict() {
