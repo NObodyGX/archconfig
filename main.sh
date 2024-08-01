@@ -199,6 +199,7 @@ function do_dev_conda() {
 function do_dev_ollama() {
     print_sub_title "ollama"
 
+    # can use ollama[cuda], but gpu is weak
     package_install "ollama"
 
     local src="${sdir}/ollama/ollama.service"
@@ -235,8 +236,8 @@ function do_dev() {
 
     do_dev_install
     do_dev_conda
-    do_dev_ollama
     do_dev_cudn
+    do_dev_ollama
 }
 
 #============================================#
