@@ -65,6 +65,7 @@ function try_link_file() {
     if [ ! -f "$src" ];then
         return 1
     fi
+
     try_link "$src" "$dst"
 }
 

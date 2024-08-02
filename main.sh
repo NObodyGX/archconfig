@@ -267,8 +267,16 @@ function do_text_helix() {
 
     package_install "helix"
 
-    local src="/usr/bin/helix"
-    local dst="/usr/bin/vi"
+    local src="${sdir}/helix/config.toml"
+    local dst="${xconf}/helix/config.toml"
+    try_link_file "$src" "$dst"
+
+    src="${sdir}/helix/languages.toml"
+    dst="${xconf}/helix/languages.toml"
+    try_link_file "$src" "$dst"
+
+    src="/usr/bin/helix"
+    dst="/usr/bin/vi"
     if [ ! -h "$dst" ];then
         print_info "start link $src ==> $dst"
         sudo_run "ln -s $src $dst"
@@ -465,6 +473,8 @@ function do_disk() {
 function do_network_networkmanager() {
     print_sub_title "networkmanager"
 
+    package_install "dhcpcd"
+
     local src="${pwd}/system/networkmanager/NetworkManager.conf"
     local dst="/etc/NetworkManager/NetworkManager.conf"
     if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
@@ -474,12 +484,18 @@ function do_network_networkmanager() {
         print_ok "installed NetworkManager.conf"
         return 0
     fi
-
     if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
         print_err "install NetworkManager.conf wrong"
     else
         print_ok "installed NetworkManager.conf"
     fi
+
+    # src="${pwd}/system/networkmanager/conf.d/dhcp-client.conf"
+    # dst="/etc/NetworkManager/conf.d/dhcp-client.conf"
+    # if [ -f $dst ];then
+    #     print_info "cp $src ==> $dst"
+    #     sudo_run "cp -f $src $dst"
+    # fi
 }
 
 function do_network() {
