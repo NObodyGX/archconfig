@@ -348,12 +348,14 @@ function do_goldendict() {
 }
 
 function do_software_system() {
-    # for tree
+    # tree
     package_install "tree"
-    # for genisoimage/isovfy
+    # genisoimage/isovfy
     package_install "cdrtools"
     # bc
     package_install "bc"
+    # jq
+    package_install "jq"
 }
 
 function do_software() {
@@ -470,6 +472,7 @@ function main() {
     do_input_method
     do_files
     do_browser
+    do_text
     do_dev
     do_software
     do_disk
