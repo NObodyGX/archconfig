@@ -422,11 +422,12 @@ function check_todo_disk() {
     if ! echo "$cmd" | grep -q "sdb1" ;then
         return 2
     fi
-    cmd=$(sudo_run "cat /etc/fstab")
-    if echo "$cmd" | grep -q "/dev/sda1" ;then
+
+    local dst="/etc/fstab"
+    if  check_by_grep_cat_sudo "$dst" "/dev/sda1" ;then
         return 3
     fi
-    if echo "$cmd" | grep -q "/dev/sdb1" ;then
+    if  check_by_grep_cat_sudo "$dst" "/dev/sdb1" ;then
         return 4
     fi
     return 0
@@ -440,14 +441,14 @@ function do_disk_mount() {
         return 0
     fi
 
-    local cmd=""
-    cmd=$(sudo_run "cat /etc/fstab")
-    if ! echo "$cmd" | grep -q "/data" ;then
+    local dst="/etc/fstab"
+    if ! check_by_grep_cat_sudo "$dst" "/data" ;then
         write_fstab "sda1" "/data"
     else
         print_ok 'mounted /data'
     fi
-    if ! echo "$cmd" | grep -q "/code" ;then
+
+    if ! check_by_grep_cat_sudo "$dst" "/code" ;then
         write_fstab "sdb1" "/code"
     else
         print_ok 'mounted /code'
@@ -458,6 +459,33 @@ function do_disk() {
     print_title "didk" 1
 
     do_disk_mount
+}
+
+
+function do_network_networkmanager() {
+    print_sub_title "networkmanager"
+
+    local src="${pwd}/system/networkmanager/NetworkManager.conf"
+    local dst="/etc/NetworkManager/NetworkManager.conf"
+    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
+        print_info "cp $src ==> $dst"
+        sudo_run "cp -f $src $dst"
+    else
+        print_ok "installed NetworkManager.conf"
+        return 0
+    fi
+
+    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
+        print_err "install NetworkManager.conf wrong"
+    else
+        print_ok "installed NetworkManager.conf"
+    fi
+}
+
+function do_network() {
+    print_title "network" 1
+    
+    do_network_networkmanager
 }
 
 
@@ -476,6 +504,7 @@ function main() {
     do_dev
     do_software
     do_disk
+    do_network
     echo_rainbow "#==========   END   ==========#"
 }
 

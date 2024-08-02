@@ -16,6 +16,20 @@ fi
 aur="yay "
 #=============== env =================#
 
+#============== check ================#
+function check_by_grep_cat_sudo() {
+    local dst="$1"
+    local todo="$2"
+    local cmd=""
+    cmd=$(sudo_run "cat $dst")
+    if ! echo "$cmd" | grep -q "$todo" ;then
+        return 1
+    fi
+    return 0
+}
+#============== check ================#
+
+#=============== try =================#
 function try_link() {
     local src="$1"
     local dst="$2"
@@ -163,3 +177,4 @@ function package_link() {
     try_link "$src" "$dst"
     print_ok "linked $src ==> $dst"
 }
+#=============== try =================#
