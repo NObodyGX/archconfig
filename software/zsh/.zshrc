@@ -13,7 +13,7 @@ autoload -Uz _zinit
 
 ### User config here ###
 ## Load prompt theme
-zinit light denysdovhan/spaceship-prompt
+zinit light spaceship-prompt/spaceship-prompt
 ## xun plugins
 ## notice: syntax-highlighting should be end
 zinit wait lucid light-mode for \
