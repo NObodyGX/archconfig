@@ -305,9 +305,9 @@ function do_text_helix() {
     local dst="${xconf}/helix/config.toml"
     try_link_file "$src" "$dst"
 
-    src="${sdir}/helix/languages.toml"
-    dst="${xconf}/helix/languages.toml"
-    try_link_file "$src" "$dst"
+    # src="${sdir}/helix/languages.toml"
+    # dst="${xconf}/helix/languages.toml"
+    # try_link_file "$src" "$dst"
 
     src="/usr/bin/helix"
     dst="/usr/bin/vi"
@@ -431,6 +431,10 @@ function do_software_media() {
     package_install "syncthing"
 }
 
+function do_wechat() {
+    package_install "wechat-uos-bwrap"
+}
+
 function do_software() {
     print_title "software" 2
     
@@ -445,6 +449,7 @@ function do_software() {
     package_install "wluma"
 
     do_goldendict
+    do_wechat
 }
 
 #============================================#
