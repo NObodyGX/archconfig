@@ -373,12 +373,20 @@ function do_software_system() {
 
 function do_software_media() {
     print_sub_title "media"
-    # video
+    ##################
+    #     video      #
+    ##################
     package_install "vlc"
     package_install "mpv"
-    # image view
-    package_install "viewnior"
+    ##################
+    #   image view   #
+    ##################
+    ## terminal use
     package_install "feh"
+    ## lightly use
+    package_install "viewnior"
+    ## habit use
+    package_install "xnviewmp"
     # image edit
     package_install "inkscape"
     package_install "krita"
