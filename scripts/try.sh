@@ -17,10 +17,27 @@ aur="yay "
 #=============== env =================#
 
 #============== check ================#
+
+function check_by_grep_cat() {
+    local dst="$1"
+    local todo="$2"
+    cmd=$("cat $dst")
+    if [ ! -f "$dst" ];then
+        return 2
+    fi
+    if ! grep -q "$todo" "$dst" ;then
+        return 1
+    fi
+    return 0
+}
+
 function check_by_grep_cat_sudo() {
     local dst="$1"
     local todo="$2"
     local cmd=""
+    if [ ! -f "$dst" ];then
+        return 2
+    fi
     cmd=$(sudo_run "cat $dst")
     if ! echo "$cmd" | grep -q "$todo" ;then
         return 1

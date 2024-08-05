@@ -1,0 +1,46 @@
+[Unit]
+Description=XGit
+After=network.target
+
+[Service]
+User=git
+Group=git
+Type=simple
+WorkingDirectory=/code/code_repos/gitea_env/
+RuntimeDirectory=gitea
+LogsDirectory=gitea
+StateDirectory=gitea
+Environment=USER=git HOME=/code/code_repos/gitea_env/gitea_home GITEA_WORK_DIR=/code/code_repos/gitea_env/gitea
+ExecStart=/usr/bin/gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini
+Restart=always
+RestartSec=8s
+ReadWritePaths=/code/code_repos/gitea_env/gitea_home/app.ini
+AmbientCapabilities=
+CapabilityBoundingSet=
+LockPersonality=true
+#Required by commit search
+#MemoryDenyWriteExecute=true
+NoNewPrivileges=True
+#SecureBits=noroot-locked
+PrivateDevices=true
+PrivateTmp=true
+PrivateUsers=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+ProtectSystem=strict
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+[Install]
+WantedBy=multi-user.target

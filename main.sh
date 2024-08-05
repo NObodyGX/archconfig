@@ -169,7 +169,7 @@ function do_files() {
 #               Develop Tools                #
 #============================================#
 
-function do_dev_install() {
+function do_dev_basic() {
     print_sub_title "dev"
 
     package_install "cmake"
@@ -234,13 +234,44 @@ function do_dev_cudn() {
     package_install "cudnn"
 }
 
-function do_dev() {
-    print_title "dev" 4
+function do_dev_gitea() {
+    print_sub_title "gitea"
 
-    do_dev_install
+    package_install "gitea"
+
+    local src="${sdir}/gitea/gitea.service"
+    local dst="/usr/lib/systemd/system/gitea.service"
+    if ! check_by_grep_cat_sudo "$dst" "XGit" ;then
+        sudo_run "cp -f $src $dst"
+    fi
+
+    if check_by_grep_cat_sudo "$dst" "XGit" ;then
+        print_ok "installed gitea.service"
+    else
+        print_err "install gitea.service"
+    fi
+
+    src="${sdir}/gitea/app.ini"
+    dst="/code/code_repos/gitea_env/gitea_home/app.ini"
+    if ! check_by_grep_cat "$dst" "xgit" ;then
+        cp -f "$src" "$dst"
+    fi
+
+    if check_by_grep_cat "$dst" "xgit" ;then
+        print_ok "installed gitea.ini"
+    else
+        print_err "install gitea.ini"
+    fi
+}
+
+function do_dev() {
+    print_title "dev" 5
+
+    do_dev_basic
     do_dev_conda
     do_dev_cudn
     do_dev_ollama
+    do_dev_gitea
 }
 
 #============================================#
@@ -386,7 +417,8 @@ function do_software_media() {
     ## lightly use
     package_install "viewnior"
     ## habit use
-    package_install "xnviewmp"
+    # xnviewmp will confict with xnviewmp-debug by freedownmanager
+    # package_install "xnviewmp"
     # image edit
     package_install "inkscape"
     package_install "krita"
