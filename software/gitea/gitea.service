@@ -3,14 +3,14 @@ Description=XGit
 After=network.target
 
 [Service]
-User=git
-Group=git
+User=xun
+Group=xun
 Type=simple
 WorkingDirectory=/code/code_repos/gitea_env/
 RuntimeDirectory=gitea
 LogsDirectory=gitea
 StateDirectory=gitea
-Environment=USER=git HOME=/code/code_repos/gitea_env/gitea_home GITEA_WORK_DIR=/code/code_repos/gitea_env/gitea
+Environment=USER=xun HOME=/code/code_repos/gitea_env/gitea_home GITEA_WORK_DIR=/code/code_repos/gitea_env/gitea
 ExecStart=/usr/bin/gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini
 Restart=always
 RestartSec=8s

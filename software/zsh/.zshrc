@@ -16,7 +16,11 @@ autoload -Uz _zinit
 zinit light spaceship-prompt/spaceship-prompt
 ## xun plugins
 ## notice: syntax-highlighting should be end
+# zdharma/fast-syntax-highlighting
+# zsh-users/zsh-syntax-highlighting
+
 zinit wait lucid light-mode for \
+    ael-code/zsh-colored-man-pages \
     supercrabtree/k \
     zsh-users/zsh-completions \
     zsh-users/zsh-autosuggestions \
@@ -24,12 +28,11 @@ zinit wait lucid light-mode for \
     Aloxaf/fzf-tab \
     MichaelAquilina/zsh-you-should-use \
     hlissner/zsh-autopair \
-    zsh-users/zsh-syntax-highlighting \
-
+    zdharma/fast-syntax-highlighting
 
 # force saving all history
-export HISTSIZE=1000000000
-export SAVEHIST=1000000000
+export HISTSIZE=10000000
+export SAVEHIST=10000000
 setopt EXTENDED_HISTORY
 
 # keymap

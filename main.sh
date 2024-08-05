@@ -399,6 +399,9 @@ function do_software_system() {
     package_install "bc"
     # jq
     package_install "jq"
+    # man
+    package_install "man-db"
+    package_install "man-pages"
 }
 
 
