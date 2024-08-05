@@ -2,8 +2,9 @@
 
 alias upgrade="yay -Syyu --noconfirm"
 alias ca="conda activate "
-alias ysy="yay"
+alias ysy="yay "
 alias yays="yay -Ss "
+alias yayS="yay -S "
 alias yayr="yay -Rns "
 alias yayq="yay -Q | grep "
 alias files="nautilus "

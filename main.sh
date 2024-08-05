@@ -176,6 +176,9 @@ function do_dev_install() {
     package_install "rust"
     package_install "go"
     package_install "nvm"
+
+    # postman
+    package_install "insomnia"
 }
 
 function do_dev_conda() {
@@ -356,6 +359,7 @@ function do_goldendict() {
 }
 
 function do_software_system() {
+    print_sub_title "basic_system"
     # tree
     package_install "tree"
     # genisoimage/isovfy
@@ -366,21 +370,28 @@ function do_software_system() {
     package_install "jq"
 }
 
-function do_software() {
-    print_title "software" 1
+
+function do_software_media() {
+    print_sub_title "media"
     # video
     package_install "vlc"
     package_install "mpv"
-    # netease-cloud
-    package_install "qcm"
-    package_install "syncthing"
-    # picture
-    package_install "inkscape"
+    # image view
+    package_install "viewnior"
     package_install "feh"
+    # image edit
+    package_install "inkscape"
     package_install "krita"
     package_install "gimp"
-    # dev
-    package_install "insomnia"
+    # music
+    package_install "qcm"
+    package_install "syncthing"
+}
+
+function do_software() {
+    print_title "software" 2
+    
+    do_software_media
     # disk
     package_install "filelight"
     # eyes
@@ -389,8 +400,6 @@ function do_software() {
     # package_install "stretchly-bin"
     # light adjust
     package_install "wluma"
-    # other
-    
 
     do_goldendict
 }
