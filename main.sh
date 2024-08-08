@@ -435,6 +435,10 @@ function do_wechat() {
     package_install "wechat-uos-bwrap"
 }
 
+function do_baidunetdisk() {
+    package_install "baidunetdisk-bin"
+}
+
 function do_software() {
     print_title "software" 2
     
@@ -450,6 +454,7 @@ function do_software() {
 
     do_goldendict
     do_wechat
+    do_baidunetdisk
 }
 
 #============================================#
