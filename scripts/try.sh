@@ -1,16 +1,19 @@
 #!/bin/bash
 
 #=============== env =================#
-if [ -z "$xhome" ];then
+if [ -z "$xhome" ]; then
     xhome="$HOME"
 fi
-if [ -z "$xconf" ];then
+if [ -z "$xconf" ]; then
     xconf="${xhome}/.config"
 fi
-if [ -z "$pwd" ];then
-    pwd=$(cd "$(dirname "$0")" || exit;pwd)
+if [ -z "$pwd" ]; then
+    pwd=$(
+        cd "$(dirname "$0")" || exit
+        pwd
+    )
 fi
-if [ -z "$sdir" ];then
+if [ -z "$sdir" ]; then
     sdir="$pwd/../software"
 fi
 aur="yay "
@@ -22,10 +25,10 @@ function check_by_grep_cat() {
     local dst="$1"
     local todo="$2"
     cmd=$("cat $dst")
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         return 2
     fi
-    if ! grep -q "$todo" "$dst" ;then
+    if ! grep -q "$todo" "$dst"; then
         return 1
     fi
     return 0
@@ -35,11 +38,11 @@ function check_by_grep_cat_sudo() {
     local dst="$1"
     local todo="$2"
     local cmd=""
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         return 2
     fi
     cmd=$(sudo_run "cat $dst")
-    if ! echo "$cmd" | grep -q "$todo" ;then
+    if ! echo "$cmd" | grep -q "$todo"; then
         return 1
     fi
     return 0
@@ -51,22 +54,22 @@ function try_link() {
     local src="$1"
     local dst="$2"
 
-    if [ -h "$dst" ];then
+    if [ -h "$dst" ]; then
         print_ok "linked ${dst}"
         return 0
     fi
 
-    if [ -d "$dst" ];then
+    if [ -d "$dst" ]; then
         print_info "delete dir: ${dst}"
         rm -rf "${dst}"
-    elif [ -f "${dst}" ];then
+    elif [ -f "${dst}" ]; then
         print_info "delete file: ${dst}"
         rm -f "${dst}"
     fi
 
     print_info "${src} ====> ${dst}"
     ln -s "${src}" "${dst}"
-    if [ -h "${dst}" ];then
+    if [ -h "${dst}" ]; then
         print_ok "linked ${dst}"
         return 0
     else
@@ -79,7 +82,7 @@ function try_link_file() {
     local src="$1"
     local dst="$2"
 
-    if [ ! -f "$src" ];then
+    if [ ! -f "$src" ]; then
         return 1
     fi
 
@@ -90,7 +93,7 @@ function try_copy_file() {
     local src="$1"
     local dst="$2"
 
-    if [ ! -f "$src" ];then
+    if [ ! -f "$src" ]; then
         return 1
     fi
     cp -f "$src" "$dst"
@@ -100,19 +103,19 @@ function try_copy_dir() {
     local src="$1"
     local dst="$2"
 
-    if [ -h "$dst" ];then
+    if [ -h "$dst" ]; then
         print_err "$dst is exist as link"
     fi
 
-    if [ ! -d  "$dst"  ];then
-        mkdir -p  "$dst" 
+    if [ ! -d "$dst" ]; then
+        mkdir -p "$dst"
     fi
-    cp -r "$src" "$dst" 
+    cp -r "$src" "$dst"
 }
 
 function try_mkdir() {
     local dst="$1"
-    if [ ! -d "$dst" ];then
+    if [ ! -d "$dst" ]; then
         mkdir -p "$dst"
     fi
 }
@@ -124,28 +127,28 @@ function sudo_run() {
 function try_add_text() {
     local content="$1"
     local dst="$2"
-    if [ ! -f "$dst" ];then
-        echo "" > "$dst"
+    if [ ! -f "$dst" ]; then
+        echo "" >"$dst"
     fi
-    if ! grep -q "$content" "$dst" ;then
-        echo "$content" >> "$dst"
+    if ! grep -q "$content" "$dst"; then
+        echo "$content" >>"$dst"
     fi
 }
 
 function try_add_text_sudo() {
     local content="$1"
     local dst="$2"
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         sudo_run "touch $dst"
     fi
-    if ! grep -q "$content" "$dst" ;then
+    if ! grep -q "$content" "$dst"; then
         sudo_run "echo $content >> $dst"
     fi
 }
 
 function try_mv() {
     local p="${xhome}"
-    if [ -d "${p}/$1" ];then
+    if [ -d "${p}/$1" ]; then
         mv "${p}/$1" "${p}/$2"
     fi
 }
@@ -153,26 +156,26 @@ function try_mv() {
 function package_check() {
     local cmd
     cmd=$($aur -Q "$1")
-    if [ -z "${cmd}" ];then
-        return 1;
+    if [ -z "${cmd}" ]; then
+        return 1
     fi
-    return 0;
+    return 0
 }
 
 function package_install() {
     local pkg="$1"
     local pname="$2"
-    if [ -z "$pname" ];then
+    if [ -z "$pname" ]; then
         pname=$pkg
     fi
 
-    if ! package_check "$pname" ;then
+    if ! package_check "$pname"; then
         print_info "start install $pkg"
         $aur -S "$pkg" --noconfirm --quiet >/dev/null 2>&1
     fi
-    if ! package_check "$pname" ;then
+    if ! package_check "$pname"; then
         print_err "install ${pkg}. try manual..."
-        return 1;
+        return 1
     fi
     print_ok "installed $pkg"
 }
@@ -180,15 +183,15 @@ function package_install() {
 function package_link() {
     local name="$1"
     local src="${sdir}/${name}"
-    if [ -n "$2" ];then
+    if [ -n "$2" ]; then
         src="$2"
     fi
     local dst="${xconf}/${name}"
-    if [ -n "$3" ];then
+    if [ -n "$3" ]; then
         dst="$3"
     fi
 
-    if [ ! -d "$src" ];then
+    if [ ! -d "$src" ]; then
         print_err "src(${src}) is not exist, exit"
         return 1
     fi

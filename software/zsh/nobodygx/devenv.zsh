@@ -1,6 +1,5 @@
 #!/usr/bin/zsh
 
-
 # terminal-cmd: clear
 export TERMINFO=/usr/share/terminfo
 # curl ssh error
@@ -18,10 +17,11 @@ export CCACHE_UMASK=002
 # This function API is accessible to scripts in /etc/profile.d
 function g_path_append() {
     case ":$PATH:" in
-        *:"$1":*)
-            ;;
-        *)
-            PATH="${PATH:+$PATH:}$1"
+    *:"$1":*) ;;
+
+    *)
+        PATH="${PATH:+$PATH:}$1"
+        ;;
     esac
 }
 

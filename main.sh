@@ -1,6 +1,9 @@
 #!/bin/bash
 
-pwd=$(cd "$(dirname "$0")" || exit;pwd)
+pwd=$(
+    cd "$(dirname "$0")" || exit
+    pwd
+)
 sdir="${pwd}/software"
 xhome="$HOME"
 xconf="${xhome}/.config"
@@ -23,7 +26,7 @@ function do_terminal_zsh() {
 
     # check zsh is default
     local cmd="$SHELL"
-    if [[ $cmd == *"zsh" ]];then
+    if [[ $cmd == *"zsh" ]]; then
         print_ok "defaulted zsh"
     else
         print_warn "zsh is not default shell"
@@ -35,7 +38,7 @@ function do_terminal_zsh() {
     # zinit install
     try_link_file "${sdir}/zsh/.zshenv" "${xhome}/.zshenv"
     try_link_file "${sdir}/zsh/.zshrc" "${xconf}/zsh/.zshrc"
-    if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ];then
+    if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ]; then
         exec zsh
     else
         print_ok "installed zinit"
@@ -69,7 +72,7 @@ function do_terminal_wezterm() {
     package_install "wezterm"
     package_install "fish"
     local dst="${xconf}/wezterm"
-    if [ ! -d "$dst" ];then
+    if [ ! -d "$dst" ]; then
         package_install "ttf-jetbrains-mono-nerd"
         local url="https://github.com/KevinSilvester/wezterm-config.git"
         git clone --depth=1 $url "$dst"
@@ -137,18 +140,18 @@ function do_user_files() {
 
     local src="$pwd/system/user-dirs.dirs"
     local dst=${xconf}/user-dirs.dirs
-    if ! grep -q "downloads" "$dst" ;then
+    if ! grep -q "downloads" "$dst"; then
         try_mv "Documents" "documents"
         try_mv "Downloads" "downloads"
         try_mv "Pictures" "pictures"
         try_mv "Public" "public"
         try_mv "Music" "music"
         try_mv "Videos" "videos"
-        
+
         try_copy_file "$src" "$dst"
     fi
     print_ok "defined user-dirs"
-    return 0;
+    return 0
 }
 
 function do_user_filemanager() {
@@ -188,13 +191,13 @@ function do_dev_conda() {
 
     local src="${sdir}/conda/.condarc"
     local dst="${xhome}/.condarc"
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         try_copy_file "$sdir" "$dst"
     fi
 
     src="${sdir}/conda/pip.conf"
     dst="${xconf}/pip/pip.conf"
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         try_copy_file "$sdir" "$dst"
     fi
 }
@@ -217,10 +220,10 @@ function do_dev_ollama() {
         print_err "add user(ollama)"
     fi
     # add ollama.service
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         sudo_run "cp $src $dst"
     fi
-    if [ -f "$dst" ];then
+    if [ -f "$dst" ]; then
         print_ok "installed ollama.service"
     fi
 
@@ -241,11 +244,11 @@ function do_dev_gitea() {
 
     local src="${sdir}/gitea/gitea.service"
     local dst="/usr/lib/systemd/system/gitea.service"
-    if ! check_by_grep_cat_sudo "$dst" "XGit" ;then
+    if ! check_by_grep_cat_sudo "$dst" "XGit"; then
         sudo_run "cp -f $src $dst"
     fi
 
-    if check_by_grep_cat_sudo "$dst" "XGit" ;then
+    if check_by_grep_cat_sudo "$dst" "XGit"; then
         print_ok "installed gitea.service"
     else
         print_err "install gitea.service"
@@ -253,11 +256,11 @@ function do_dev_gitea() {
 
     src="${sdir}/gitea/app.ini"
     dst="/code/code_repos/gitea_env/gitea_home/app.ini"
-    if ! check_by_grep_cat "$dst" "xgit" ;then
+    if ! check_by_grep_cat "$dst" "xgit"; then
         cp -f "$src" "$dst"
     fi
 
-    if check_by_grep_cat "$dst" "xgit" ;then
+    if check_by_grep_cat "$dst" "xgit"; then
         print_ok "installed gitea.ini"
     else
         print_err "install gitea.ini"
@@ -292,7 +295,7 @@ function do_text_pulsar() {
     print_sub_title "pulsar"
 
     package_install "pulsar-bin"
-    
+
     try_copy_file "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
 }
 
@@ -311,12 +314,12 @@ function do_text_helix() {
 
     src="/usr/bin/helix"
     dst="/usr/bin/vi"
-    if [ ! -h "$dst" ];then
+    if [ ! -h "$dst" ]; then
         print_info "start link $src ==> $dst"
         sudo_run "ln -s $src $dst"
     fi
 
-    if [ -h $dst ];then
+    if [ -h $dst ]; then
         print_ok "link vi"
     else
         print_err "link vi err, try manul"
@@ -331,7 +334,7 @@ function do_text_other() {
 
 function do_text() {
     print_title "text" 4
-    
+
     do_text_vscode
     do_text_pulsar
     do_text_helix
@@ -349,11 +352,11 @@ function write_firefox_css() {
     local dstdir
     dstdir=$(dirname "$dst")
     try_mkdir "$dstdir"
-    if [ ! -f "$dst" ];then
+    if [ ! -f "$dst" ]; then
         try_copy_file "$src" "$dst"
     fi
 
-    if [ -f "$dst" ];then
+    if [ -f "$dst" ]; then
         print_ok "Checked firefox userCss"
     fi
 }
@@ -364,9 +367,8 @@ function do_browser_firefox() {
     package_install "firefox"
 
     local src="${xhome}/.mozilla/firefox"
-    find "$src" -mindepth 1 -maxdepth 1 -type d | while read -r mdir
-    do
-        if [[ $mdir == *"default" || $mdir == *"default-release" ]];then
+    find "$src" -mindepth 1 -maxdepth 1 -type d | while read -r mdir; do
+        if [[ $mdir == *"default" || $mdir == *"default-release" ]]; then
             write_firefox_css "$mdir"
         fi
     done
@@ -404,7 +406,6 @@ function do_software_system() {
     package_install "man-pages"
 }
 
-
 function do_software_media() {
     print_sub_title "media"
     ##################
@@ -441,7 +442,7 @@ function do_baidunetdisk() {
 
 function do_software() {
     print_title "software" 2
-    
+
     do_software_media
     # disk
     package_install "filelight"
@@ -464,9 +465,9 @@ function do_software() {
 function write_fstab() {
     local diskname="$1"
     local mpoint="$2"
-    local cmd="" dtype="" duuid="" content="";
+    local cmd="" dtype="" duuid="" content=""
 
-    if [ ! -d "$mpoint" ];then
+    if [ ! -d "$mpoint" ]; then
         print_info "try create $mpoint"
         sudo_run "mkdir -p $mpoint"
     fi
@@ -486,18 +487,18 @@ function write_fstab() {
 function check_todo_disk() {
     local cmd=""
     cmd=$(sudo_run "lsblk -f")
-    if ! echo "$cmd" | grep -q "sda1" ;then
+    if ! echo "$cmd" | grep -q "sda1"; then
         return 1
     fi
-    if ! echo "$cmd" | grep -q "sdb1" ;then
+    if ! echo "$cmd" | grep -q "sdb1"; then
         return 2
     fi
 
     local dst="/etc/fstab"
-    if  check_by_grep_cat_sudo "$dst" "/dev/sda1" ;then
+    if check_by_grep_cat_sudo "$dst" "/dev/sda1"; then
         return 3
     fi
-    if  check_by_grep_cat_sudo "$dst" "/dev/sdb1" ;then
+    if check_by_grep_cat_sudo "$dst" "/dev/sdb1"; then
         return 4
     fi
     return 0
@@ -506,19 +507,19 @@ function check_todo_disk() {
 function do_disk_mount() {
     print_sub_title "mount disk"
 
-    if ! check_todo_disk ;then
+    if ! check_todo_disk; then
         print_ok 'checked mount'
         return 0
     fi
 
     local dst="/etc/fstab"
-    if ! check_by_grep_cat_sudo "$dst" "/data" ;then
+    if ! check_by_grep_cat_sudo "$dst" "/data"; then
         write_fstab "sda1" "/data"
     else
         print_ok 'mounted /data'
     fi
 
-    if ! check_by_grep_cat_sudo "$dst" "/code" ;then
+    if ! check_by_grep_cat_sudo "$dst" "/code"; then
         write_fstab "sdb1" "/code"
     else
         print_ok 'mounted /code'
@@ -531,7 +532,6 @@ function do_disk() {
     do_disk_mount
 }
 
-
 function do_network_networkmanager() {
     print_sub_title "networkmanager"
 
@@ -539,14 +539,14 @@ function do_network_networkmanager() {
 
     local src="${pwd}/system/networkmanager/NetworkManager.conf"
     local dst="/etc/NetworkManager/NetworkManager.conf"
-    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
+    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd"; then
         print_info "cp $src ==> $dst"
         sudo_run "cp -f $src $dst"
     else
         print_ok "installed NetworkManager.conf"
         return 0
     fi
-    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd" ;then
+    if ! check_by_grep_cat_sudo "$dst" "wifi.backend=iwd"; then
         print_err "install NetworkManager.conf wrong"
     else
         print_ok "installed NetworkManager.conf"
@@ -562,11 +562,9 @@ function do_network_networkmanager() {
 
 function do_network() {
     print_title "network" 1
-    
+
     do_network_networkmanager
 }
-
-
 
 function main() {
     echo_rainbow "#========== NObodyGX ==========#"

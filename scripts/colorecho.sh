@@ -6,47 +6,47 @@ foreground=38
 
 function get_ccode() {
     local name="$1"
-    case "${name}" in 
-        "black") ccode=30;;
-        "red") ccode=31;;
-        "green") ccode=32;;
-        "yellow") ccode=33;;
-        "blue") ccode=34;;
-        "magenta") ccode=35;;
-        "cyan") ccode=36;;
-        "white") ccode=37;;
+    case "${name}" in
+    "black") ccode=30 ;;
+    "red") ccode=31 ;;
+    "green") ccode=32 ;;
+    "yellow") ccode=33 ;;
+    "blue") ccode=34 ;;
+    "magenta") ccode=35 ;;
+    "cyan") ccode=36 ;;
+    "white") ccode=37 ;;
         # extend by 256
-        "brown") ccode=52;;
-        "purple") ccode=93;;
-        "orange") ccode=202;;
-        "pink") ccode=206;;
-        *) ccode=37;;
+    "brown") ccode=52 ;;
+    "purple") ccode=93 ;;
+    "orange") ccode=202 ;;
+    "pink") ccode=206 ;;
+    *) ccode=37 ;;
     esac
 }
 
 function get_foreground_ccode() {
     local name="$1"
-    case "${name}" in 
-        "black") foreground=40;;
-        "red") foreground=41;;
-        "green") foreground=42;;
-        "yellow") foreground=43;;
-        "blue") foreground=44;;
-        "magenta") foreground=45;;
-        "cyan") foreground=46;;
-        "white") foreground=47;;
-        *) foreground=40;;
+    case "${name}" in
+    "black") foreground=40 ;;
+    "red") foreground=41 ;;
+    "green") foreground=42 ;;
+    "yellow") foreground=43 ;;
+    "blue") foreground=44 ;;
+    "magenta") foreground=45 ;;
+    "cyan") foreground=46 ;;
+    "white") foreground=47 ;;
+    *) foreground=40 ;;
     esac
 }
 
 function get_cstyle() {
     local name="$1"
-    case "${name}" in 
-        "") cstyle="";;
-        "b") cstyle="1;";;
-        "i") cstyle="3;";;
-        "st") cstyle="9;";;
-        *) cstyle="";;
+    case "${name}" in
+    "") cstyle="" ;;
+    "b") cstyle="1;" ;;
+    "i") cstyle="3;" ;;
+    "st") cstyle="9;" ;;
+    *) cstyle="" ;;
     esac
 }
 
@@ -60,14 +60,14 @@ function i_echo_nowarp() {
 
 #================= echo rainbow ==============
 rcindex=0
-rccolors=( 196 208 226 118 46 48 51 33 21 93 201 198 )
+rccolors=(196 208 226 118 46 48 51 33 21 93 201 198)
 rcnum=${#rccolors[@]}
 function echo_rainbow() {
     foreground=38
     text="$1"
-    for (( i=0 ; i < ${#text} ; i++ )); do 
+    for ((i = 0; i < ${#text}; i++)); do
         rccode=${rccolors[$rcindex]}
-        rcindex=$((rcindex +1))
+        rcindex=$((rcindex + 1))
         rcindex=$((rcindex % rcnum))
         character=${text:i:1}
         echo -en "\033[${foreground};5;${rccode}m${character}\033[0m"
@@ -76,8 +76,6 @@ function echo_rainbow() {
     return
 }
 #=============================================
-
-
 
 #================= index count ===============
 step_index=0
@@ -97,7 +95,7 @@ function _print() {
 }
 
 function print_title() {
-    step_index=$((step_index+1))
+    step_index=$((step_index + 1))
     _print "b" "blue" "" "blue"
     local name="$1"
     pkg_total="$2"
@@ -107,7 +105,7 @@ function print_title() {
 }
 
 function print_sub_title() {
-    pkg_index=$((pkg_index+1))
+    pkg_index=$((pkg_index + 1))
     _print "b" "cyan" "" "cyan"
     local name="$1"
     i_echo "[$pkg_index/$pkg_total] install $name "
