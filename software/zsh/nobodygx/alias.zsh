@@ -28,3 +28,9 @@ function yy() {
     fi
     rm -f -- "$tmp"
 }
+
+function mvimg() {
+    local src="$1"
+    local dst="/data/zres/images"
+    mv "$src" "$dst"
+}
