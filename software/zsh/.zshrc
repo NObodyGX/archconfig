@@ -1,24 +1,19 @@
-export ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
+#!/bin/zsh
+
+
+typeset -A ZINIT
+ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
+ZINIT[HOME_DIR]=$ZINIT_HOME
+# export ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 
 source "${ZINIT_HOME}/zinit.zsh"
-source "${HOME}/.config/zsh/nobodygx/alias.zsh"
-source "${HOME}/.config/zsh/nobodygx/devenv.zsh"
+## nobodygx
+source "${HOME}/.config/zsh/nobodygx/init.zsh"
 
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
-
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-### User config here ###
-## Load prompt theme
-zinit light spaceship-prompt/spaceship-prompt
-## xun plugins
-## notice: syntax-highlighting should be end
-# zdharma/fast-syntax-highlighting
-# zsh-users/zsh-syntax-highlighting
-
+## zinit
+zinit light "spaceship-prompt/spaceship-prompt"
 zinit wait lucid light-mode for \
     ael-code/zsh-colored-man-pages \
     supercrabtree/k \
@@ -30,10 +25,14 @@ zinit wait lucid light-mode for \
     hlissner/zsh-autopair \
     zdharma/fast-syntax-highlighting
 
-# force saving all history
-export HISTSIZE=10000000
-export SAVEHIST=10000000
-setopt EXTENDED_HISTORY
+# zsh history
+HISTSIZE=100000
+SAVEHIST=100000
+HISTFILE="${HOME}/.config/zsh/.zhistory"
+setopt appendhistory notify
+
+# conda
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
 # keymap
 # use `read -k` to get a key sequence
