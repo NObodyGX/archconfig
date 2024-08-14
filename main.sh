@@ -404,6 +404,8 @@ function do_software_system() {
     # man
     package_install "man-db"
     package_install "man-pages"
+    # jpegoptim
+    package_install "jpegoptim"
 }
 
 function do_software_media() {
