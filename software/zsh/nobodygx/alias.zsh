@@ -11,7 +11,7 @@ alias yayq="yay -Q | grep "
 alias files="nautilus "
 alias kk="du -sh *"
 alias gitea_run="gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini"
-alias hugo_run="hugo serve --renderToMemory"
+alias hexo_run="hexo cl && hexo s"
 alias G="git clone --depth=1 "
 
 alias cp='cp -iv'
