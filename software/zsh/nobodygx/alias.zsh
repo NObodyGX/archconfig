@@ -37,8 +37,14 @@ function mvimg() {
     mv "$src" "$dst"
 }
 
-function jpegtim() {
+function jpegop() {
     local src="$1"
+    local rank="$2"
+    local extra="$3"
+    if [ -z "$rank" ];then
+        rank="75"
+    fi
+
     local ori="$1/old"
     if [ ! -d "$ori" ];then
         mkdir -p "$ori"
@@ -50,7 +56,7 @@ function jpegtim() {
     done
     for tf in $(ls $ori);do
         if [[ $tf == *.jpg ]];then
-            jpegoptim  -m75  "${ori}/${tf}" -d "$src"
+            jpegoptim -m$rank "${ori}/${tf}" -d "$src" "$extra"
         fi
     done
 }
