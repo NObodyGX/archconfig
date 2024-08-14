@@ -404,8 +404,10 @@ function do_software_system() {
     # man
     package_install "man-db"
     package_install "man-pages"
-    # jpegoptim
+    # jpegoptim, optimiza jpg size
     package_install "jpegoptim"
+    # optipng, optimize png size
+    package_install "optipng"
 }
 
 function do_software_media() {

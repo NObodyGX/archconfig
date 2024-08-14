@@ -54,3 +54,18 @@ function jpegtim() {
         fi
     done
 }
+
+function tvid() {
+    local src="$1"
+    local mode="$2"
+    if [[ "$mode" == "0" ]];then
+        ffmpeg -hide_banner -i "$src" -movflags +faststart -c copy -map 0 "${src}_tran0.mp4"
+    elif [[ "$mode" == "1" ]];then
+        ffmpeg -hide_banner -i "$src" -movflags +faststart -preset slow -crf 18 -c:v libx265 "${src}_tran1.mp4"
+    elif [[ "$mode" == "2" ]];then
+        ffmpeg -hide_banner -i "$src" -movflags +faststart -preset slow -crf 20 -c:v libx264 "${src}_tran1.mp4"
+    else
+        echo "error input, use tvid $name $mode"
+        echo "mode: 0-copy, 1-lib265, 2-lib264"
+    fi
+}
