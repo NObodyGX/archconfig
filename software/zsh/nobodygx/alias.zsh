@@ -21,6 +21,19 @@ alias rm='rm -iv'
 alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
 alias ls="ls --color=auto"
+alias genmd="ncmd genmd . "
+
+function rmv() {
+    local dst="$1"
+    local src="$2"
+    mv "$src" "$dst"
+}
+
+function bmv() {
+    local src="$1"
+    local dst="$2"
+    mv "$src" "$dst-$src"
+}
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
