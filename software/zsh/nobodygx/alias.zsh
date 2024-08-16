@@ -10,9 +10,9 @@ alias yayR="yay -Rnsc "
 alias yayq="yay -Q | grep "
 alias files="nautilus "
 alias kk="du -sh *"
-alias gitea_run="gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini"
-alias hexo_run="hexo cl && hexo s"
-alias hexo_gen="cd /data/shome && hexo gen && cd -"
+alias gitear="gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini"
+alias hexor="hexo cl && hexo s"
+alias hexog="cd /data/shome && hexo gen && cd -"
 alias G="git clone --depth=1 "
 
 alias cp='cp -iv'
