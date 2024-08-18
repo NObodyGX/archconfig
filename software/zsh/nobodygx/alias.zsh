@@ -30,15 +30,6 @@ alias rename="ncmd rename "
 
 alias covertran="mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg"
 
-function ddttmm() {
-    local src="$1"
-    for tf in $(ls $src);do
-        cd "$src/$tf"
-        _=$(ncmd rename .)
-        _=$(ncmd genmd . -n $(basename $PWD | cut -d - -f2) -t TODO -c 图片 -a xxx -d 2020-02-11)
-        cd -
-    done
-}
 
 function rmv() {
     local dst="$1"
