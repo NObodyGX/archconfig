@@ -37,7 +37,7 @@ function do_terminal_zsh() {
 
     # zinit install
     try_link_file "${sdir}/zsh/.zshenv" "${xhome}/.zshenv"
-    try_link_file "${sdir}/zsh/.zshrc" "${xconf}/zsh/.zshrc"
+    try_link_file "${sdir}/zsh/.zshrc" "${xhome}/.zshrc"
     if [ ! -f "${xconf}/zsh/zinit/zinit.git/zinit.zsh" ]; then
         exec zsh
     else
@@ -176,7 +176,7 @@ function do_dev_basic() {
     print_sub_title "dev"
 
     package_install "cmake"
-    package_install "rust"
+    # package_install "rust"
     package_install "go"
     package_install "nvm"
 

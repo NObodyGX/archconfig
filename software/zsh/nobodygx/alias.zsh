@@ -11,8 +11,9 @@ alias yayq="yay -Q | grep "
 alias files="nautilus "
 alias kk="du -sh *"
 alias gitear="gitea web -c /code/code_repos/gitea_env/gitea_home/app.ini"
-alias hexor="hexo cl && hexo s"
+alias hexor="cd /data/shome && hexo cl && hexo s"
 alias hexog="cd /data/shome && hexo gen && cd -"
+alias hexocl="cd /data/shome && hexo cl "
 alias G="git clone --depth=1 "
 
 alias cp='cp -iv'
@@ -21,7 +22,23 @@ alias rm='rm -iv'
 alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
 alias ls="ls --color=auto"
-alias genmd="ncmd genmd . "
+alias genmd="ncmd genmd ."
+alias genmdfast="ncmd genmd . -n $(basename $PWD | cut -d - -f2) -t TODO -c 图片"
+
+unset rename
+alias rename="ncmd rename "
+
+alias covertran="mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg"
+
+function ddttmm() {
+    local src="$1"
+    for tf in $(ls $src);do
+        cd "$src/$tf"
+        _=$(ncmd rename .)
+        _=$(ncmd genmd . -n $(basename $PWD | cut -d - -f2) -t TODO -c 图片 -a xxx -d 2020-02-11)
+        cd -
+    done
+}
 
 function rmv() {
     local dst="$1"
@@ -70,6 +87,32 @@ function jpegop() {
     for tf in $(ls $ori);do
         if [[ $tf == *.jpg ]];then
             jpegoptim -m$rank "${ori}/${tf}" -d "$src" "$extra"
+        fi
+    done
+}
+
+function pngtran() {
+    local src="$1"
+    local extra="$2"
+
+    source "${HOME}/.config/zsh/nobodygx/utils/progressbar.sh" || exit 1
+
+    local ori="$1/old"
+    if [ ! -d "$ori" ];then
+        mkdir -p "$ori"
+    fi
+    for tf in $(ls $src);do
+        if [[ $tf == *.png ]];then
+            mv -f "${src}/${tf}" "${ori}/${tf}"
+        fi
+    done
+    end=$(ls $ori/*.png | wc -l)
+    ii=0
+    for tf in $(ls $ori);do
+        if [[ $tf == *.png ]];then
+            ii=$(($ii+1))
+            local _=$(magick "${ori}/${tf}"  "$src/${tf}.jpg")
+            progressbar "Convert png into jpg:" $ii $end
         fi
     done
 }

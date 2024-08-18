@@ -4,12 +4,13 @@
 typeset -A ZINIT
 ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
 ZINIT[HOME_DIR]=$ZINIT_HOME
-# export ZINIT_HOME="${HOME}/.config/zsh/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 
 source "${ZINIT_HOME}/zinit.zsh"
 ## nobodygx
+ZNOGX_HOME="${HOME}/.config/zsh/nobodygx"
+[ ! -d $ZNOGX_HOME ] && mkdir -p "$(dirname $ZNOGX_HOME)"
 source "${HOME}/.config/zsh/nobodygx/init.zsh"
 
 ## zinit
@@ -23,12 +24,13 @@ zinit wait lucid light-mode for \
     Aloxaf/fzf-tab \
     MichaelAquilina/zsh-you-should-use \
     hlissner/zsh-autopair \
+    agkozak/zsh-z \
     zdharma/fast-syntax-highlighting
-
 # zsh history
 HISTSIZE=1000000
 SAVEHIST=1000000
-HISTFILE="${HOME}/.config/zsh/.zhistory"
+HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history"
+mkdir -p "${HISTFILE:h}"
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS
