@@ -23,7 +23,7 @@ alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
 alias ls="ls --color=auto"
 alias genmd="ncmd genmd ."
-alias genmdfast="ncmd genmd . -n $(basename $PWD | cut -d - -f2) -t TODO -c 图片"
+alias genmdfast="ncmd genmd . -n $(basename $PWD | cut -d - -f2) -a $(basename $(dirname $PWD))"
 
 unset rename
 alias rename="ncmd rename "
@@ -50,12 +50,6 @@ function yy() {
         cd -- "$cwd"
     fi
     rm -f -- "$tmp"
-}
-
-function mvimg() {
-    local src="$1"
-    local dst="/data/zres/images"
-    mv "$src" "$dst"
 }
 
 function jpegop() {
@@ -108,7 +102,7 @@ function pngtran() {
     done
 }
 
-function tvid() {
+function vidtran() {
     local src="$1"
     local mode="$2"
     if [[ "$mode" == "0" ]];then
