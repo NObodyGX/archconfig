@@ -23,13 +23,19 @@ alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
 alias ls="ls --color=auto"
 alias genmd="ncmd genmd ."
-alias genmdfast="ncmd genmd . -n $(basename $PWD | cut -d - -f2) -a $(basename $(dirname $PWD))"
 
 unset rename
 alias rename="ncmd rename "
 
 alias covertran="mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg"
 
+function genmdfast() {
+    local extra="$*"
+    local artist="", name=""
+    name=$(basename $PWD | cut -d - -f2)
+    artist=$(basename $(dirname $PWD))
+    _=$(ncmd genmd . -n=$name -a=$artist $extra)
+}
 
 function rmv() {
     local dst="$1"
