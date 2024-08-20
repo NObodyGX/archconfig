@@ -15,6 +15,15 @@ source "${pwd}/scripts/try.sh"
 #                  Terminal                  #
 #============================================#
 
+function do_terminal_fish() {
+    print_sub_title "fish"
+
+    package_install "fish"
+    package_install "exa"
+
+    try_link_dir "${sdir}/fish" "${xconf}/fish"
+}
+
 function do_terminal_zsh() {
     print_sub_title "zsh"
 
@@ -91,6 +100,7 @@ function do_terminal_vim() {
 function do_terminal() {
     print_title "terminal" 5
 
+    do_terminal_fish
     do_terminal_zsh
     do_terminal_foot
     do_terminal_alacritty
