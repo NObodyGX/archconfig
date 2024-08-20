@@ -5,19 +5,7 @@ local options = {
    launch_menu = {},
 }
 
-if platform.is_win then
-   options.default_prog = { 'pwsh' }
-   options.launch_menu = {
-      { label = 'PowerShell Core', args = { 'pwsh' } },
-      { label = 'PowerShell Desktop', args = { 'powershell' } },
-      { label = 'Command Prompt', args = { 'cmd' } },
-      { label = 'Nushell', args = { 'nu' } },
-      {
-         label = 'Git Bash',
-         args = { 'C:\\Users\\kevin\\scoop\\apps\\git\\current\\bin\\bash.exe' },
-      },
-   }
-elseif platform.is_linux then
+if platform.is_linux then
    options.default_prog = { 'zsh', '-l' }
    options.launch_menu = {
       { label = 'Bash', args = { 'bash', '-l' } },
