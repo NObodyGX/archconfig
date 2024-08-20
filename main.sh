@@ -73,9 +73,8 @@ function do_terminal_wezterm() {
     package_install "fish"
     local dst="${xconf}/wezterm"
     if [ ! -d "$dst" ]; then
-        package_install "ttf-jetbrains-mono-nerd"
-        local url="https://github.com/KevinSilvester/wezterm-config.git"
-        git clone --depth=1 $url "$dst"
+        package_install "nerd-fonts-sarasa-term"
+        try_link_dir "${sdir}/wezterm" "${xconf}/wezterm"
     fi
 }
 

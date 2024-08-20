@@ -89,6 +89,17 @@ function try_link_file() {
     try_link "$src" "$dst"
 }
 
+function try_link_dir() {
+    local src="$1"
+    local dst="$2"
+
+    if [ ! -d "$src" ]; then
+        return 1
+    fi
+
+    try_link "$src" "$dst"
+}
+
 function try_copy_file() {
     local src="$1"
     local dst="$2"
