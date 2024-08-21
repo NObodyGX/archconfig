@@ -11,16 +11,15 @@ function grep     ; command grep --color=auto $argv ; end
 abbr mv 'mv -v'
 abbr rm 'rm -v'
 abbr cp 'cp -v'
-# mkdir
+# normal
 alias mkdir='mkdir -pv'
 alias df='df -h'
 alias du='du -ch'
 alias free='free -m'
-
-
-alias G='git clone --depth=1 '
 alias k='exa'
 alias kk='du -sh *'
+
+alias G='git clone --depth=1 '
 
 if type -q exa
     alias l exa
@@ -31,13 +30,15 @@ end
 
 
 # nobodygx
-
 alias genmd='ncmd genmd .'
 if set -q rename
     set -e rename
 end
 alias rename='ncmd rename '
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
+alias hexor="cd /data/shome && hexo cl && hexo s"
+alias hexog="cd /data/shome && hexo gen && cd -"
+alias hexocl="cd /data/shome && hexo cl "
 
 
 function genmdfast --description 'genmd fastly' -a extra
