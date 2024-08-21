@@ -6,7 +6,7 @@ local options = {
 }
 
 if platform.is_linux then
-   options.default_prog = { 'zsh', '-l' }
+   options.default_prog = { 'fish', '-l' }
    options.launch_menu = {
       { label = 'Bash', args = { 'bash', '-l' } },
       { label = 'Fish', args = { 'fish', '-l' } },
