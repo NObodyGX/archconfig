@@ -1,7 +1,7 @@
 function jpegop --description "Optimize jpeg with jpegoptim in dir"
     switch "$argv"
         case -v --version
-            echo "jpegop, version 1.0.1"
+            echo "jpegop, version 1.0.2"
             return 0
         case "" -h --help
             echo 'Usage: jpegop [Options] $idir $rank'
@@ -24,7 +24,6 @@ function jpegop --description "Optimize jpeg with jpegoptim in dir"
     set -l jrank $argv[2]
 
     if test -z "$jrank"
-        echo "should set jrank"
         set jrank '75'
     end
 
