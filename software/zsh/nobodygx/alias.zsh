@@ -22,32 +22,7 @@ alias rm='rm -iv'
 alias grep="grep -i --color=auto"
 alias mkdir="mkdir -p"
 alias ls="ls --color=auto"
-alias genmd="ncmd genmd ."
 
-unset rename
-alias rename="ncmd rename "
-
-alias covertran="mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg"
-
-function genmdfast() {
-    local extra="$*"
-    local artist="", name=""
-    name=$(basename $PWD | cut -d - -f2)
-    artist=$(basename $(dirname $PWD))
-    _=$(ncmd genmd . -n=$name -a=$artist $extra)
-}
-
-function rmv() {
-    local dst="$1"
-    local src="$2"
-    mv "$src" "$dst"
-}
-
-function bmv() {
-    local src="$1"
-    local dst="$2"
-    mv "$src" "$dst-$src"
-}
 
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
