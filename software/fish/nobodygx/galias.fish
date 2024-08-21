@@ -28,6 +28,11 @@ if type -q exa
     alias ltree='exa --long --all --group --header --tree --level '
 end
 
+# nvm
+
+function nvm
+    fenv source ~/.nvm/nvm.sh \; nvm $argv
+end
 
 # nobodygx
 alias genmd='ncmd genmd .'
@@ -35,6 +40,7 @@ if set -q rename
     set -e rename
 end
 alias rename='ncmd rename '
+alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor="cd /data/shome && hexo cl && hexo s"
 alias hexog="cd /data/shome && hexo gen && cd -"
