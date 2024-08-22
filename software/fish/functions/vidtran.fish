@@ -44,4 +44,5 @@ function vidtran --description "transform video by ffmpeg"
         case '*'
             echo "error param"
     end
+    echo "[success]tran $n_src ====> $n_bfname"
 end

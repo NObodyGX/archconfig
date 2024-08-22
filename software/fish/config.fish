@@ -1,5 +1,6 @@
 
-
+# 配置路径不用缩写
+set -g fish_prompt_pwd_dir_length 0
 
 source "$HOME/.config/fish/nobodygx/galias.fish"
 
