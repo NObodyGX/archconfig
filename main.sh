@@ -20,6 +20,7 @@ function do_terminal_fish() {
 
     package_install "fish"
     package_install "exa"
+    package_install "unrar"
 
     try_link_dir "${sdir}/fish" "${xconf}/fish"
 }
