@@ -12,13 +12,22 @@ abbr mv 'mv -v'
 abbr rm 'rm -v'
 abbr cp 'cp -v'
 # normal
+alias ls='ls --color=auto'
 alias mkdir='mkdir -pv'
 alias df='df -h'
 alias du='du -ch'
 alias free='free -m'
 alias k='exa'
 alias kk='du -sh *'
-
+# system
+alias upgrade='yay -Syyu --noconfirm'
+alias ca='conda activate '
+alias yays='yay -Ss '
+alias yayS='yay -S '
+alias yayr='yay -Rns '
+alias yayR='yay -Rnsc '
+alias yayq='yay -Q | grep '
+alias kk='du -sh *'
 alias G='git clone --depth=1 '
 
 if type -q exa
@@ -42,9 +51,9 @@ end
 alias rename='ncmd rename '
 alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
-alias hexor="cd /data/shome && hexo cl && hexo s"
-alias hexog="cd /data/shome && hexo gen && cd -"
-alias hexocl="cd /data/shome && hexo cl "
+alias hexor='cd /data/shome && hexo cl && hexo s'
+alias hexog='cd /data/shome && hexo gen && cd -'
+alias hexocl='cd /data/shome && hexo cl '
 
 
 function genmdfast --description 'genmd fastly' -a extra

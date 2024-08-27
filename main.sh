@@ -62,7 +62,6 @@ function do_terminal_foot() {
 
     package_install "ttf-maple-sc-nerd"
     package_install "foot"
-    package_install "lsix"
 
     package_link "foot"
 }
@@ -432,6 +431,11 @@ function do_software_media() {
     ##################
     ## terminal use
     package_install "feh"
+    # terminal inner picture viewer
+    # need sixel, wezterm/koncole/foot/kitty
+    package_install "lsix"
+    package_install "viu"
+    package_install "chafa"
     ## lightly use
     package_install "viewnior"
     ## habit use

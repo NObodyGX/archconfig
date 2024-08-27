@@ -33,18 +33,17 @@ function extract --description "extract archives for any"
         return 1
     end
 
-    set -l n_suffix (path extension $n_src)
-    switch $n_suffix
-        case '.7z'
+    switch $n_src
+        case '*.7z'
             echo "7z x $n_src -p$n_psd -o$n_dst"
             7z x $n_src -p$n_psd -o$n_dst
-        case '.gz'
+        case '*.gz'
             echo "tar zxf $n_src -C $n_dst"
-        case '.br2'
+        case '*.br2'
             echo "tar jxf $n_src -C $n_dst" 
-        case '.tar'
+        case '*.tar'
             echo "tar xf $n_src -C $n_dst" 
-        case '.rar'
+        case '*.rar'
             unrar x $n_src -p$n_psd $n_dst
         case '*'
             echo 'todo'
