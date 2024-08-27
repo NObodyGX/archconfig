@@ -8,7 +8,6 @@ function ..... ; cd ../../../.. ; end
 function grep     ; command grep --color=auto $argv ; end
 
 # mv, rm, cp
-abbr mv 'mv -v'
 abbr rm 'rm -v'
 abbr cp 'cp -v'
 # normal
@@ -61,4 +60,11 @@ function genmdfast --description 'genmd fastly' -a extra
     set -l M_CUR (dirname $PWD)
     set -l M_ARTIST (basename $M_CUR)
     ncmd genmd . -n=$M_NAME -a=$M_ARTIST
+end
+
+function covercal --description 'cal cover width and height'
+    set -l jw (jpeginfo _cover.jpg | awk '{print $2}')
+    set -l jh (jpeginfo _cover.jpg | awk '{print $4}')
+    set -l njh (math round (math $jw \* 0.528))
+    echo "tran ($jw, $njh), tran $jw --> $njh"
 end

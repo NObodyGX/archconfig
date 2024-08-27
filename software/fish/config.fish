@@ -3,7 +3,7 @@
 set -g fish_prompt_pwd_dir_length 0
 export TERMINFO=/usr/share/terminfo
 
-source "$HOME/.config/fish/nobodygx/galias.fish"
+source "$HOME/.config/fish/nobodygx/falias.fish"
 
 
 
@@ -23,4 +23,3 @@ else
     end
 end
 # <<< conda initialize <<<
-
