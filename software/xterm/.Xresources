@@ -1,0 +1,176 @@
+!-- xterm configuration
+
+! Set the console to 256 colors
+xterm*termName: xterm-256color
+
+! Set vt340
+xterm*decTerminalID: vt340
+
+! Use UTF-8
+xterm*locale: true
+
+! Fix the Alt key
+! xterm*metaSendsEscape: true
+
+! Scroll options
+xterm*saveLines:        8192
+xterm*jumpScroll:       true
+xterm*multiScroll:      false
+xterm*fastScroll:       false
+xterm*scrollTtyOutput:  false
+xterm*scrollKey:        true
+
+! Scrollbar options
+xterm*scrollBar: false
+xterm*rightScrollBar: true
+xterm*scrollBarBorder: 0
+
+! Size of the window
+xterm*VT100.geometry: 80x32
+
+! A double click selection the whole URLs
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! Enable the bell urgency
+xterm*bellIsUrgent: false
+
+! Remove black border
+xterm*borderWidth: 0
+
+! Allow the cursor to blink
+xterm*cursorBlink: false
+
+! Colorscheme
+xterm*background: #1B1B1B
+xterm*foreground: #AAAAAA
+! black
+xterm*color0  : #2E3436
+xterm*color8  : #555753
+! red
+xterm*color1  : #CC0000
+xterm*color9  : #EF2929
+! green
+xterm*color2  : #4E9A06
+xterm*color10 : #8AE234
+! yellow
+xterm*color3  : #C4A000
+xterm*color11 : #FCE94F
+! blue
+xterm*color4  : #3465A4
+xterm*color12 : #729FCF
+! magenta
+xterm*color5  : #75507B
+xterm*color13 : #AD7FA8
+! cyan
+xterm*color6  : #06989A
+xterm*color14 : #34E2E2
+! white
+xterm*color7  : #D3D7CF
+xterm*color15 : #EEEEEC
+
+! Font
+! xterm*faceName: Source Code Pro for Powerline
+! xterm*faceName: DejaVu Sans Mono for Powerline
+xterm*faceName: Maple Mono SC NF
+xterm*faceSize: 13
+
+! Key translation
+xterm*selectToClipboard: true
+xterm*vt100.translations: #override \
+  Ctrl Shift <KeyPress> C:    select-end(PRIMARY,CLIPBOARD,CUT_BUFFER0) \n\
+  Ctrl Shift <KeyPress> V:    insert-selection(CLIPBOARD, CUT_BUFFER0, PRIMARY) \n\
+  Alt <KeyPress> F11:         fullscreen(toggle) \n\
+  Ctrl ~Shift <KeyPress>Tab:  string(0x1b) string("[27;5;9~") \n\
+  Ctrl Shift <KeyPress>Tab:   string(0x1b) string("[27;6;9~") \n
+
+!-- URxvt configuration
+
+! Fix weird blinking problem ??
+! URxvt*buffered: false
+
+! Start as a login shell
+URxvt*loginShell: false
+
+! Font
+URxvt*font:     xft:Maple Mono SC NF:pixelsize=13:antialias=true:hinting=true
+URxvt*boldFont: xft:Maple Mono SC NF:bold:pixelsize=13:antialias=true:hinting=true
+
+! Scrollbar options
+URxvt*scrollBar:        true
+URxvt*scrollBar_right:  true
+URxvt*scrollstyle:      plain
+URxvt*scrollColor:      #777777
+
+! Save a certain amount of lines to scroll up
+URxvt*saveLines:          8192
+URxvt*scrollTtyKeypress:  true
+URxvt*scrollTtyOutput:    false
+URxvt*scrollWithBuffer:   false
+
+! Transparency
+URxvt*transparent: false
+! URxvt*tintColor: #FFFFFF
+! URxvt*shading: 100
+
+! Colorscheme
+URxvt*background: #1B1B1B
+URxvt*foreground: #AAAAAA
+! black
+URxvt*color0  : #2E3436
+URxvt*color8  : #555753
+! red
+URxvt*color1  : #CC0000
+URxvt*color9  : #EF2929
+! green
+URxvt*color2  : #4E9A06
+URxvt*color10 : #8AE234
+! yellow
+URxvt*color3  : #C4A000
+URxvt*color11 : #FCE94F
+! blue
+URxvt*color4  : #3465A4
+URxvt*color12 : #729FCF
+! magenta
+URxvt*color5  : #75507B
+URxvt*color13 : #AD7FA8
+! cyan
+URxvt*color6  : #06989A
+URxvt*color14 : #34E2E2
+! white
+URxvt*color7  : #D3D7CF
+URxvt*color15 : #EEEEEC
+
+! Disable the Ctrl-Shift hotkeys
+URxvt*iso14755: False
+
+! Hack to use C-Tab and C-S-Tab then
+URxvt.keysym.Control-Tab:           \033[27;5;9~
+URxvt.keysym.Control-ISO_Left_Tab:  \033[27;6;9~
+
+! Use local perl scrips
+! URxvt.perl-lib: ~/.urxvt
+
+! Use some perl scrips
+URxvt.perl-ext-common: fullscreen,keyboard-select,clipboard,url-select
+
+! Keyboard selection (like in Vim)
+URxvt.keysym.Meta-f: perl:keyboard-select:activate
+URxvt.keysym.Meta-s: perl:keyboard-select:search
+
+! URL selection
+URxvt.keysym.Meta-u:        perl:url-select:select_next
+URxvt.url-select.autocopy:  true
+URxvt.url-select.underline: true
+URxvt.url-select.button:    2
+URxvt.url-select.launcher:  google-chrome-stable
+
+! Copy and paste
+URxvt.keysym.Control-Shift-C: perl:clipboard:copy
+URxvt.keysym.Control-Shift-V: perl:clipboard:paste
+URxvt.clipboard.autocopy:     true
+URxvt.clipboard.copycmd:      xclip -i -selection clipboard
+URxvt.clipboard.pastecmd:     xclip -o -selection clipboard
+URxvt*pastableTabs:           true
+
+! Toggle fullscreen
+URxvt.keysym.F11: perl:fullscreen:switch
