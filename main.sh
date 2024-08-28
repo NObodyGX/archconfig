@@ -339,6 +339,7 @@ function do_text_other() {
 
     package_install "lapce"
     package_install "gedit"
+    package_install "zed"
 }
 
 function do_text() {
