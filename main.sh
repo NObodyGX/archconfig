@@ -437,6 +437,11 @@ function do_software_media() {
     package_install "lsix"
     package_install "viu"
     package_install "chafa"
+    ##################
+    #  snap/capture  #
+    ##################
+    package_install "flameshot"
+    package_install "ksnip"
     ## lightly use
     package_install "viewnior"
     ## habit use

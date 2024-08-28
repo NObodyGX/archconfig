@@ -11,7 +11,7 @@ function grep     ; command grep --color=auto $argv ; end
 abbr rm 'rm -v'
 abbr cp 'cp -v'
 # normal
-alias ls='ls --color=auto'
+
 alias mkdir='mkdir -pv'
 alias df='df -h'
 alias du='du -ch'
@@ -19,10 +19,10 @@ alias free='free -m'
 alias k='exa'
 alias kk='du -sh *'
 # system
-alias upgrade='yay -Syyu --noconfirm'
+abbr upgrade 'yay -Syyu --noconfirm'
 alias ca='conda activate '
 alias yays='yay -Ss '
-alias yayS='yay -S '
+alias yayS='yay -S --needed '
 alias yayr='yay -Rns '
 alias yayR='yay -Rnsc '
 alias yayq='yay -Q | grep '
@@ -30,10 +30,10 @@ alias kk='du -sh *'
 alias G='git clone --depth=1 '
 
 if type -q exa
-    alias l exa
-    alias la 'exa --long --all --group --header --binary --links'
-    alias ll 'exa --long --all --group --header --git'
-    alias ltree='exa --long --all --group --header --tree --level '
+    alias ls='exa --icons --group-directories-first '
+    alias la 'exa --icons --all --group --header --binary --links --group-directories-first '
+    alias ll 'exa --icons --long --all --group --header --git --group-directories-first '
+    alias ltree='exa  --icons --long --all --group --header --tree --level '
 end
 
 # nvm
