@@ -10,6 +10,7 @@ function grep     ; command grep --color=auto $argv ; end
 # mv, rm, cp
 abbr rm 'rm -v'
 abbr cp 'cp -v'
+abbr q  'exit'
 # normal
 
 alias mkdir='mkdir -pv'

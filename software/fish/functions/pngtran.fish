@@ -51,6 +51,7 @@ function pngtran --description "transfrom png into jpeg in dir"
         end
         set -l n_name (path change-extension '' $fff)
         magick "$n_old/$fff" "$n_src/$n_name.jpg"
+        touch "$n_src/$n_name.jpg" -r "$n_old/$fff"
         print_progress $n_count $n_cur
         set n_cur (math $n_cur + 1)
     end
