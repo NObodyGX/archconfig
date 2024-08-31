@@ -48,7 +48,7 @@ alias genmd='ncmd genmd .'
 if set -q rename
     set -e rename
 end
-alias rename='ncmd rename '
+alias ren='ncmd rename .'
 alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor='cd /data/shome && hexo cl && hexo s'
@@ -56,16 +56,14 @@ alias hexog='cd /data/shome && hexo gen && cd -'
 alias hexocl='cd /data/shome && hexo cl '
 
 
-function genmdfast --description 'genmd fastly' -a extra
-    set -l M_NAME (basename $PWD | cut -d - -f2)
-    set -l M_CUR (dirname $PWD)
-    set -l M_ARTIST (basename $M_CUR)
-    ncmd genmd . -n=$M_NAME -a=$M_ARTIST
-end
-
 function covercal --description 'cal cover width and height'
     set -l jw (jpeginfo _cover.jpg | awk '{print $2}')
     set -l jh (jpeginfo _cover.jpg | awk '{print $4}')
     set -l njh (math round (math $jw \* 0.528))
-    echo "tran ($jw, $njh), tran $jw --> $njh"
+    echo "tran ($jw, $jh) --> ($jw, $njh)"
+end
+
+function covertran --description 'transform cover with sp raido'
+    mogrify -resize 1280x676 _cover.jpg
+    identify _cover.jpg
 end
