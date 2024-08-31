@@ -56,11 +56,14 @@ alias hexog='cd /data/shome && hexo gen && cd -'
 alias hexocl='cd /data/shome && hexo cl '
 
 
-function covercal --description 'cal cover width and height'
+function coverinfo --description 'cal cover width and height'
     set -l jw (jpeginfo _cover.jpg | awk '{print $2}')
     set -l jh (jpeginfo _cover.jpg | awk '{print $4}')
     set -l njh (math round (math $jw \* 0.528))
-    echo "tran ($jw, $jh) --> ($jw, $njh)"
+    set -l ncut (math $jh - $njh)
+    set -l nncmd (string join -n '' $jw "x" $njh '+0+' $ncut)
+    echo "tran ($jw, $jh) --> ($jw, $njh) || $ncut"
+    echo "magick _cover.jpg -crop $nncmd _cover.jpg"
 end
 
 function covertran --description 'transform cover with sp raido'

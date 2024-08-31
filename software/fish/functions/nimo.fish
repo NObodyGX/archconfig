@@ -1,7 +1,7 @@
 function nimo --description "monite picture in dirs"
     switch "$argv"
         case -v --version
-            echo "nimo, version 1.0.0"
+            echo "nimo, version 1.0.1"
             return 0
         case "" -h --help
             echo 'Usage: nimo [Options] $idir'
@@ -72,22 +72,20 @@ function nimo --description "monite picture in dirs"
         end
         viu "$nsrc/$fff" -h $nwid
 
-        echo "keep it? y-keep, n-delete, q-exit"
-        set -l l_cba (read )
+        echo "keep it? 1-keep, 2-delete, 3-skip, q-exit"
+        set -l l_cba (read -n 1)
         switch "$l_cba"
-            case 'Y'
+            case '1'
                 mv "$nsrc/$fff" "$L_SUC_DIR/$fff"
-            case 'y'
-                mv "$nsrc/$fff" "$L_SUC_DIR/$fff"
-            case 'N'
-                mv "$nsrc/$fff" "$L_TMP_DIR/$fff"
-            case 'n'
+            case '2'
                 mv "$nsrc/$fff" "$L_TMP_DIR/$fff"
             case 'q'
                 echo 'exit'
+                clear
                 return 0
             case 'Q'
                 echo 'exit'
+                clear
                 return 0
             case '*'
                 echo "error input, skip"
