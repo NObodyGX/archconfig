@@ -39,7 +39,7 @@ function jpegop --description "Optimize jpeg with jpegoptim in dir"
     if ! test -d $L_TMP_DIR
         mkdir -p $L_TMP_DIR
     end
-    
+
     for fff in (ls $jsrc)
         if not test -f "$jsrc/$fff"
             continue
@@ -58,5 +58,6 @@ function jpegop --description "Optimize jpeg with jpegoptim in dir"
             continue
         end
         jpegoptim -m$jrank $L_TMP_DIR/$fff -d $jsrc
+        touch "$jsrc/$fff" -r "$L_TMP_DIR/$fff"
     end
 end
