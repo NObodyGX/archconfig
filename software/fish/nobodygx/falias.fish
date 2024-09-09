@@ -30,6 +30,9 @@ alias yayq='yay -Q | grep '
 alias kk='du -sh *'
 alias G='git clone --depth=1 '
 
+# cp mv
+alias gcp='rsync -avh --progress '
+
 if type -q exa
     alias ls='exa --icons --group-directories-first '
     alias la 'exa --icons --all --group --header --binary --links --group-directories-first '
