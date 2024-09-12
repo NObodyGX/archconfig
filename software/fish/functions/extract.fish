@@ -21,10 +21,14 @@ function extract --description "extract archives for any"
             echo "start extract $argv"
     end
     set -l n_src $argv[1]
-    set -l n_psd $argv[2]
+    set -l n_pwd $argv[2]
     set -l n_dst $argv[3]
     if test -z $n_dst
         set n_dst "."
+    end
+
+    if test $n_pwd -eq 1
+        set n_pwd "gmw1024"
     end
 
     if not test -f $n_src
@@ -35,16 +39,15 @@ function extract --description "extract archives for any"
 
     switch $n_src
         case '*.7z'
-            echo "7z x $n_src -p$n_psd -o$n_dst"
-            7z x $n_src -p$n_psd -o$n_dst
+            7z x $n_src -p$n_pwd -o$n_dst
         case '*.gz'
             echo "tar zxf $n_src -C $n_dst"
         case '*.br2'
-            echo "tar jxf $n_src -C $n_dst" 
+            echo "tar jxf $n_src -C $n_dst"
         case '*.tar'
-            echo "tar xf $n_src -C $n_dst" 
+            echo "tar xf $n_src -C $n_dst"
         case '*.rar'
-            unrar x $n_src -p$n_psd $n_dst
+            unrar x $n_src -p$n_pwd $n_dst
         case '*'
             echo 'todo'
     end

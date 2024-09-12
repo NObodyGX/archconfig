@@ -423,14 +423,16 @@ function do_software_system() {
 function do_software_media() {
     print_sub_title "media"
     ##################
-    #     video      #
+    #   video play   #
     ##################
     package_install "vlc"
     package_install "mpv"
+    package_install "qmplay2"
+    package_install "haruna"
     ##################
     #   image view   #
     ##################
-    ## terminal use
+    ## terminal use ##
     package_install "feh"
     # terminal inner picture viewer
     # need sixel, wezterm/koncole/foot/kitty
@@ -447,13 +449,21 @@ function do_software_media() {
     ## habit use
     # xnviewmp will confict with xnviewmp-debug by freedownmanager
     # package_install "xnviewmp"
-    # image edit
+    ##################
+    #   image edit   #
+    ##################
     package_install "inkscape"
     package_install "krita"
     package_install "gimp"
-    # music
+    ##################
+    #   music play   #
+    ##################
     package_install "qcm"
     package_install "syncthing"
+    ##################
+    #   media share  #
+    ##################
+    package_install "chfs"
 }
 
 function do_wechat() {
@@ -476,6 +486,9 @@ function do_software() {
     # package_install "stretchly-bin"
     # light adjust
     package_install "wluma"
+
+    # work
+    package_install "endeavour"
 
     do_goldendict
     do_wechat

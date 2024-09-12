@@ -8,9 +8,10 @@ function ..... ; cd ../../../.. ; end
 function grep     ; command grep --color=auto $argv ; end
 
 # mv, rm, cp
-abbr rm 'rm -v'
+abbr rm 'rm -vrf'
 abbr cp 'cp -v'
 abbr q  'exit'
+abbr clr 'clear'
 # normal
 
 alias mkdir='mkdir -pv'
