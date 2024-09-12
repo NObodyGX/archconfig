@@ -487,9 +487,6 @@ function do_software() {
     # light adjust
     package_install "wluma"
 
-    # work
-    package_install "endeavour"
-
     do_goldendict
     do_wechat
     do_baidunetdisk
@@ -597,6 +594,17 @@ function do_network_networkmanager() {
     # fi
 }
 
+function do_work() {
+    print_title "work" 3
+
+    # todo
+    package_install "endeavour"
+
+    # db sql
+    package_install "dbeaver"
+    package_install "meowsql-git"
+
+}
 function do_network() {
     print_title "network" 1
 
@@ -618,6 +626,7 @@ function main() {
     do_software
     do_disk
     do_network
+    do_work
     echo_rainbow "#==========   END   ==========#"
 }
 

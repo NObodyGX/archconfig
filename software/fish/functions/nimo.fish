@@ -70,25 +70,38 @@ function nimo --description "monite picture in dirs"
         if not test (path extension $fff) = '.jpg'
             mv "$nsrc/$fff" "$L_OTH_DIR/$fff"
         end
-        viu "$nsrc/$fff" -h $nwid
-
-        echo "keep it? 1-keep, 2-delete, 3-skip, q-exit"
-        set -l l_cba (read -n 1)
-        switch "$l_cba"
-            case '1'
-                mv "$nsrc/$fff" "$L_SUC_DIR/$fff"
-            case '2'
-                mv "$nsrc/$fff" "$L_TMP_DIR/$fff"
-            case 'q'
-                echo 'exit'
-                clear
-                return 0
-            case 'Q'
-                echo 'exit'
-                clear
-                return 0
-            case '*'
-                echo "error input, skip"
+        while true
+            viu "$nsrc/$fff" -h $nwid
+            echo "keep it? 1-keep, 2-delete, 3-skip, e-lrot, r-rrot q-exit"
+            set -l l_cba (read -n 1)
+            switch "$l_cba"
+                case '1'
+                    mv "$nsrc/$fff" "$L_SUC_DIR/$fff"
+                    break
+                case '2'
+                    mv "$nsrc/$fff" "$L_TMP_DIR/$fff"
+                    break
+                case 'e'
+                    magick convert -rotate -90 "$nsrc/$fff" "$nsrc/$fff"
+                case 'E'
+                    magick convert -rotate -90 "$nsrc/$fff" "$nsrc/$fff"
+                case 'r'
+                    magick convert -rotate 90 "$nsrc/$fff" "$nsrc/$fff"
+                case 'R'
+                    magick convert -rotate 90 "$nsrc/$fff" "$nsrc/$fff"
+                case 'q'
+                    echo 'exit'
+                    clear
+                    return 0
+                case 'Q'
+                    echo 'exit'
+                    clear
+                    return 0
+                case '*'
+                    echo "error input, skip"
+                    break
+            end
+            clear
         end
         clear
     end

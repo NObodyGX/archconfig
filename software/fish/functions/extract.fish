@@ -27,8 +27,10 @@ function extract --description "extract archives for any"
         set n_dst "."
     end
 
-    if test $n_pwd -eq 1
-        set n_pwd "gmw1024"
+    if not test -z $n_pwd
+        if test $n_pwd -eq 1
+            set n_pwd "gmw1024"
+        end
     end
 
     if not test -f $n_src
@@ -48,6 +50,8 @@ function extract --description "extract archives for any"
             echo "tar xf $n_src -C $n_dst"
         case '*.rar'
             unrar x $n_src -p$n_pwd $n_dst
+        case '*.zip'
+            unzip $n_src -d $n_dst
         case '*'
             echo 'todo'
     end

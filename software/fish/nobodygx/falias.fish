@@ -33,6 +33,8 @@ alias G='git clone --depth=1 '
 
 # cp mv
 alias gcp='rsync -avh --progress '
+# fish
+alias ex='extract'
 
 if type -q exa
     alias ls='exa --icons --group-directories-first '
