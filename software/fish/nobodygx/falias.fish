@@ -55,6 +55,7 @@ if set -q rename
     set -e rename
 end
 alias ren='ncmd rename .'
+alias rens='ncmd rename . && ncmd rename . -f "mp4" -n "v{num:1}" && ncmd rename . -f "png" --start=99 && chmodxxx . '
 alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor='cd /data/shome && hexo cl && hexo s'
@@ -75,4 +76,8 @@ end
 function covertran --description 'transform cover with sp raido'
     mogrify -resize 1280x676 _cover.jpg
     identify _cover.jpg
+end
+
+function dren --description 'add index for dir'
+    mv $argv[1] $argv[2]-$argv[1]
 end
