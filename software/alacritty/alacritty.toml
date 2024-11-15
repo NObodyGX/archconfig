@@ -1,5 +1,3 @@
-#设置改变配置自动启动 [window]的需要重启
-live_config_reload = true
 
 #改变窗口设置
 [window]
@@ -57,3 +55,7 @@ style = { shape = "Beam", blinking = "On" }
 [terminal]
 #设定复制黏贴行为 默认只能复制
 osc52 = "CopyPaste"
+
+[general]
+#设置改变配置自动启动 [window]的需要重启
+live_config_reload = true

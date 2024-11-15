@@ -1,0 +1,7 @@
+packages=[
+    "https://github.com/NObodyGX/atom-document-outline.git",
+    "https://github.com/NObodyGX/atom-asciidoc-preview.git",
+    "https://github.com/NObodyGX/atom-plantuml-preview.git",
+    "https://github.com/asciidoctor/atom-language-asciidoc.git",
+    "https://github.com/b3by/atom-clock.git"
+]

@@ -13,6 +13,7 @@ end
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
+export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
 if test -f /opt/miniconda3/bin/conda
     eval /opt/miniconda3/bin/conda "shell.fish" "hook" $argv | source
 else

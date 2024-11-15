@@ -47,6 +47,26 @@ function check_by_grep_cat_sudo() {
     fi
     return 0
 }
+
+function check_str_endswith() {
+    local text="$1"
+    local todo="$2"
+    if [ -z "$text" ];then
+        echo "2"
+        return 2
+    fi
+    if [ -z "$todo" ];then
+        echo "3"
+        return 3
+    fi
+    if [[ $text = "*${todo}" ]]; then
+        echo "0"
+        return 0
+    fi
+    echo "1"
+    return 1
+}
+
 #============== check ================#
 
 #=============== try =================#

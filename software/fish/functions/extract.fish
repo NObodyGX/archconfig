@@ -28,7 +28,7 @@ function extract --description "extract archives for any"
     end
 
     if not test -z $n_pwd
-        if test $n_pwd -eq 1
+        if test $n_pwd = "1"
             set n_pwd "gmw1024"
         end
     end

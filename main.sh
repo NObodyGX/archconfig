@@ -33,6 +33,7 @@ function do_terminal_zsh() {
     package_install "fd"
     package_install "bat"
     package_install "less"
+    package_install "tombl-bin"
 
     # check zsh is default
     local cmd="$SHELL"
@@ -304,6 +305,18 @@ function do_text_pulsar() {
     print_sub_title "pulsar"
 
     package_install "pulsar-bin"
+
+    cd "${xhome}/.pulsar/packages"
+    eval "$(tombl -e PKGS=packages ${sdir}/pulsar/packages.toml)"
+    for apkg in ${PKGS[@]}
+    do
+        local pname=$(echo $apkg | awk -F '/' '{print $5}')
+        if [[ "$pname"  ]];then
+        fi
+        # git clone --depth=1 "$apkg"
+        echo $pname
+    done
+    cd -
 
     try_copy_file "${sdir}/pulsar/config.cson" "${xhome}/.pulsar/config.cson"
 }
@@ -611,6 +624,10 @@ function do_network() {
     do_network_networkmanager
 }
 
+function do_font() {
+    package_install "nerd-fonts-sarasa-term"
+}
+
 function main() {
     echo_rainbow "#========== NObodyGX ==========#"
     echo_rainbow "#========== ArchConf ==========#"
@@ -627,7 +644,13 @@ function main() {
     do_disk
     do_network
     do_work
+    do_font
     echo_rainbow "#==========   END   ==========#"
 }
 
-main "$@"
+function custom_main() {
+    do_text_pulsar
+}
+
+#main "$@"
+custom_main
