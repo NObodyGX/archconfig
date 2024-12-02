@@ -1,11 +1,15 @@
 #!/bin/python3
 
+import os
 import sys
 
 def main(ifile:str):
     with open(ifile, mode='r', encoding='utf-8') as f:
         fulltext = f.read()
     content = []
+    bname = os.path.basename(ifile)
+    bname = bname[:bname.rfind('.')]
+    content.append(f'# {bname}\n')
     for line in fulltext.split("\n"):
         if not line.startswith("#"):
             content.append(line)
