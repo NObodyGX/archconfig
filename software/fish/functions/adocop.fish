@@ -20,6 +20,9 @@ function adocop --description "transform asciidoc into markdown"
             echo "start extract $argv"
     end
     set -l n_src $argv[1]
+    if string match -aq "*.adoc" $n_src
+        set n_src (string sub --end=-5 $argv[1])
+    end
     set -l n_dst $argv[2]
     if test -z $n_dst
         set n_dst "."
@@ -27,5 +30,6 @@ function adocop --description "transform asciidoc into markdown"
 
     asciidoctor -b docbook $n_src.adoc -o /tmp/$n_src.xml
     pandoc -f docbook -t markdown_mmd -o $n_dst/$n_src.md /tmp/$n_src.xml --wrap=none
+    python3 ~/.config/fish/nobodygx/adoc_clean.py $n_dst/$n_src.md
     rm -f /tmp/$n_src.xml
 end
