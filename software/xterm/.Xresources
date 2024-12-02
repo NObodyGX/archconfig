@@ -73,6 +73,7 @@ xterm*color15 : #EEEEEC
 ! xterm*faceName: DejaVu Sans Mono for Powerline
 xterm*faceName: Maple Mono SC NF
 xterm*faceSize: 13
+xterm*faceNameDoublesize: nolxgw
 
 ! Key translation
 xterm*selectToClipboard: true

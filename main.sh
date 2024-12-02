@@ -18,22 +18,11 @@ source "${pwd}/scripts/try.sh"
 function do_terminal_fish() {
     print_sub_title "fish"
 
-    package_install "fish"
-    package_install "exa"
-    package_install "unrar"
-
     try_link_dir "${sdir}/fish" "${xconf}/fish"
 }
 
 function do_terminal_zsh() {
     print_sub_title "zsh"
-
-    package_install "zsh"
-    package_install "fzf"
-    package_install "fd"
-    package_install "bat"
-    package_install "less"
-    package_install "tombl-bin"
 
     # check zsh is default
     local cmd="$SHELL"
@@ -61,17 +50,12 @@ function do_terminal_zsh() {
 function do_terminal_foot() {
     print_sub_title "foot"
 
-    package_install "ttf-maple-sc-nerd"
-    package_install "foot"
-
     package_link "foot"
 }
 
 function do_terminal_alacritty() {
     print_sub_title "alacritty"
 
-    package_install "ttf-maple-sc-nerd"
-    package_install "alacritty"
 
     package_link "alacritty"
 }
@@ -182,18 +166,6 @@ function do_files() {
 #               Develop Tools                #
 #============================================#
 
-function do_dev_basic() {
-    print_sub_title "dev"
-
-    package_install "cmake"
-    # package_install "rust"
-    package_install "go"
-    package_install "nvm"
-
-    # postman
-    package_install "insomnia"
-}
-
 function do_dev_conda() {
     print_sub_title "conda"
 
@@ -240,13 +212,6 @@ function do_dev_ollama() {
     sudo_run "systemctl start ollama"
 }
 
-function do_dev_cudn() {
-    print_sub_title "cudn"
-
-    package_install "cuda"
-    package_install "cudnn"
-}
-
 function do_dev_gitea() {
     print_sub_title "gitea"
 
@@ -280,9 +245,7 @@ function do_dev_gitea() {
 function do_dev() {
     print_title "dev" 5
 
-    do_dev_basic
     do_dev_conda
-    do_dev_cudn
     do_dev_ollama
     do_dev_gitea
 }
@@ -347,13 +310,7 @@ function do_text_helix() {
         print_err "link vi err, try manul"
     fi
 }
-function do_text_other() {
-    print_sub_title "text other"
 
-    package_install "lapce"
-    package_install "gedit"
-    package_install "zed"
-}
 
 function do_text() {
     print_title "text" 4
@@ -361,7 +318,6 @@ function do_text() {
     do_text_vscode
     do_text_pulsar
     do_text_helix
-    do_text_other
 }
 
 #============================================#
@@ -397,113 +353,6 @@ function do_browser_firefox() {
     done
 }
 
-function do_browser_fdm() {
-    print_sub_title "freedownloadmanager"
-
-    package_install "freedownloadmanager"
-}
-
-function do_browser() {
-    print_title "browser" 2
-
-    do_browser_firefox
-    do_browser_fdm
-}
-
-function do_goldendict() {
-    package_install "goldendict-ng-git"
-}
-
-function do_software_system() {
-    print_sub_title "basic_system"
-    # tree
-    package_install "tree"
-    # genisoimage/isovfy
-    package_install "cdrtools"
-    # bc
-    package_install "bc"
-    # jq
-    package_install "jq"
-    # man
-    package_install "man-db"
-    package_install "man-pages"
-    # jpegoptim, optimiza jpg size
-    package_install "jpegoptim"
-    # optipng, optimize png size
-    package_install "optipng"
-}
-
-function do_software_media() {
-    print_sub_title "media"
-    ##################
-    #   video play   #
-    ##################
-    package_install "vlc"
-    package_install "mpv"
-    package_install "qmplay2"
-    package_install "haruna"
-    ##################
-    #   image view   #
-    ##################
-    ## terminal use ##
-    package_install "feh"
-    # terminal inner picture viewer
-    # need sixel, wezterm/koncole/foot/kitty
-    package_install "lsix"
-    package_install "viu"
-    package_install "chafa"
-    ##################
-    #  snap/capture  #
-    ##################
-    package_install "flameshot"
-    package_install "ksnip"
-    ## lightly use
-    package_install "viewnior"
-    ## habit use
-    # xnviewmp will confict with xnviewmp-debug by freedownmanager
-    # package_install "xnviewmp"
-    ##################
-    #   image edit   #
-    ##################
-    package_install "inkscape"
-    package_install "krita"
-    package_install "gimp"
-    ##################
-    #   music play   #
-    ##################
-    package_install "qcm"
-    package_install "syncthing"
-    ##################
-    #   media share  #
-    ##################
-    package_install "chfs"
-}
-
-function do_wechat() {
-    package_install "wechat-uos-bwrap"
-}
-
-function do_baidunetdisk() {
-    package_install "baidunetdisk-bin"
-}
-
-function do_software() {
-    print_title "software" 2
-
-    do_software_media
-    # disk
-    package_install "filelight"
-    # eyes
-    # work interval relax
-    package_install "workrave"
-    # package_install "stretchly-bin"
-    # light adjust
-    package_install "wluma"
-
-    do_goldendict
-    do_wechat
-    do_baidunetdisk
-}
 
 #============================================#
 #                    Disk                    #
@@ -607,32 +456,16 @@ function do_network_networkmanager() {
     # fi
 }
 
-function do_work() {
-    print_title "work" 3
 
-    # todo
-    package_install "endeavour"
-
-    # db sql
-    package_install "dbeaver"
-    package_install "meowsql-git"
-
-}
 function do_network() {
     print_title "network" 1
 
     do_network_networkmanager
 }
 
-function do_font() {
-    package_install "nerd-fonts-sarasa-term"
-}
+
 
 function main() {
-    echo_rainbow "#========== NObodyGX ==========#"
-    echo_rainbow "#========== ArchConf ==========#"
-    echo_rainbow "#==========   START  ==========#"
-    set_step_total 8
 
     do_terminal
     do_input_method
@@ -643,8 +476,6 @@ function main() {
     do_software
     do_disk
     do_network
-    do_work
-    do_font
     echo_rainbow "#==========   END   ==========#"
 }
 
