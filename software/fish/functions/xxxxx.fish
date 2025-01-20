@@ -1,5 +1,4 @@
-function extract --description "extract archives for any"
-
+function xxxxx --description "transform video by ffmpeg"
     function __n_print_help
         echo 'Usage: extract [Options] $ifile $password $odir'
         echo 'Options:'
@@ -35,23 +34,8 @@ function extract --description "extract archives for any"
             set n_pwd "gmw1024"
         end
     end
-
     for ll_src in $n_src
-        switch $ll_src
-            case '*.7z'
-                7z x $ll_src -p$n_pwd -o$n_dst
-            case '*.gz'
-                echo "tar zxf $ll_src -C $n_dst"
-            case '*.br2'
-                echo "tar jxf $ll_src -C $n_dst"
-            case '*.tar'
-                echo "tar xf $ll_src -C $n_dst"
-            case '*.rar'
-                unrar x $ll_src -p$n_pwd $n_dst
-            case '*.zip'
-                unzip $ll_src -d $n_dst
-            case '*'
-                echo 'todo'
-        end
+        echo $ll_src
     end
+
 end
