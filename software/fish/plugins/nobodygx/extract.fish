@@ -1,14 +1,12 @@
 function extract --description "extract archives for any"
-
     function __n_print_help
-        echo 'Usage: extract [Options] $ifile $password $odir'
+        echo 'Usage: extract [Options] $ifiles --password=$password --odir=$odir'
         echo 'Options:'
-        echo '    -v or --version  print version'
         echo '    -h or --help     print help message'
         echo '    -p or --password password for tar'
         echo '    -o or --odir     output dir'
         echo 'Param:'
-        echo "    ifiles:    input file"
+        echo "    ifiles: input files"
         echo "Example:"
         echo "    extract a.rar b.rar c.rar --password=112233 -o /code/tmp"
     end
@@ -23,33 +21,36 @@ function extract --description "extract archives for any"
         exit
     end
 
-    set -l n_src (string split0 $argv --no-empty)
-    set -l n_pwd $_flag_p
-    set -l n_dst $_flag_o
-    if test -z $n_dst
-        set n_dst "."
+    set -l l_src (string split0 $argv --no-empty)
+    set -l l_pwd $_flag_p
+    set -l l_dst $_flag_o
+    if test -z $l_dst
+        set l_dst "."
     end
 
-    if not test -z $n_pwd
-        if test $n_pwd = "1"
-            set n_pwd "gmw1024"
+    if not test -z $l_pwd
+        if test $l_pwd = "1"
+            set l_pwd "gmw1024"
         end
     end
 
-    for ll_src in $n_src
-        switch $ll_src
+    for l_ifile in $l_src
+        if not test -f $l_ifile
+            continue
+        end
+        switch $l_ifile
             case '*.7z'
-                7z x $ll_src -p$n_pwd -o$n_dst
+                7z x $l_ifile -p$l_pwd -o$l_dst
             case '*.gz'
-                echo "tar zxf $ll_src -C $n_dst"
+                echo "tar zxf $l_ifile -C $l_dst"
             case '*.br2'
-                echo "tar jxf $ll_src -C $n_dst"
+                echo "tar jxf $l_ifile -C $l_dst"
             case '*.tar'
-                echo "tar xf $ll_src -C $n_dst"
+                echo "tar xf $l_ifile -C $l_dst"
             case '*.rar'
-                unrar x $ll_src -p$n_pwd $n_dst
+                unrar x $l_ifile -p$l_pwd $l_dst
             case '*.zip'
-                unzip $ll_src -d $n_dst
+                unzip $l_ifile -d $l_dst
             case '*'
                 echo 'todo'
         end

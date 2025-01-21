@@ -1,3 +1,5 @@
+set -U fish_greeting
+
 # Navigation
 function ..    ; cd .. ; end
 function ...   ; cd ../.. ; end

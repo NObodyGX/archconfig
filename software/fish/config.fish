@@ -5,7 +5,11 @@ export TERMINFO=/usr/share/terminfo
 
 source "$HOME/.config/fish/nobodygx/falias.fish"
 
-
+set -l core_function_path "$HOME/.config/fish/plugins/nobodygx"
+# Autoload core library
+set fish_function_path $fish_function_path[1] \
+                       $core_function_path \
+                       $fish_function_path[2..-1]
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
