@@ -19,7 +19,6 @@ function jpegop --description "Optimize jpeg with jpegoptim in dir"
         __n_print_help
         exit
     end
-
     if test -z "$argv"
         echo "error in param"
         return 2

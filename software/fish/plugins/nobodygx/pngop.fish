@@ -18,7 +18,6 @@ function pngop --description "transfrom png into jpeg in dir"
         __n_print_help
         exit
     end
-
     if test -z "$argv"
         echo "error in param"
         return 2

@@ -16,7 +16,7 @@ function extract --description "extract archives for any"
     set options $options (fish_opt --short=o --long=odir --optional-val)
     argparse $options -- $argv
 
-    if not test -z $_flag_h
+    if ! test -z $_flag_h
         __n_print_help
         exit
     end
@@ -28,14 +28,14 @@ function extract --description "extract archives for any"
         set l_dst "."
     end
 
-    if not test -z $l_pwd
+    if ! test -z $l_pwd
         if test $l_pwd = "1"
             set l_pwd "gmw1024"
         end
     end
 
     for l_ifile in $l_src
-        if not test -f $l_ifile
+        if ! test -f $l_ifile
             continue
         end
         switch $l_ifile

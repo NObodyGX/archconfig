@@ -71,9 +71,9 @@ xterm*color15 : #EEEEEC
 ! Font
 ! xterm*faceName: Source Code Pro for Powerline
 ! xterm*faceName: DejaVu Sans Mono for Powerline
-xterm*faceName: Maple Mono SC NF
+xterm*faceName: JetBrainsMono NF
 xterm*faceSize: 13
-xterm*faceNameDoublesize: nolxgw
+xterm*faceNameDoublesize: Maple Mono SC NF
 
 ! Key translation
 xterm*selectToClipboard: true
