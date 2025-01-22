@@ -19,5 +19,8 @@ function dmv --description "add index for dir"
     if test -z (string match -r '^\d+-' $l_name)
         set l_name $l_index-$l_item
     end
+    if test $l_item = $l_name
+        return 0
+    end
     mv $l_item $l_name
 end

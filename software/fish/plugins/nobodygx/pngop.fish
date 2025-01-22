@@ -16,15 +16,11 @@ function pngop --description "transfrom png into jpeg in dir"
 
     if not test -z $_flag_h
         __n_print_help
-        exit
+        return 0
     end
-    if test -z "$argv"
-        echo "error in param"
-        return 2
-    end
-    set -l n_src (string split0 $argv --no-empty)
+    set -l l_src $argv[1]
     set -l l_rank $_flag_r
-    set -l l_old "$l_src/old"
+    set -l l_old "$l_src/zbackup"
 
     if not test -d "$l_src"
         set_color $fish_color_error
@@ -47,9 +43,8 @@ function pngop --description "transfrom png into jpeg in dir"
         mv "$l_src/$ifile" "$l_old/$ifile"
     end
 
-    set -l n_count (ls $l_old| grep '.png' | wc -l)
-    echo $n_count
-    set -l n_cur 1
+    set -l l_count (ls $l_old| grep '.png' | wc -l)
+    set -l l_cur 1
     for ifile in (ls $l_old)
         if not test -f "$l_old/$ifile"
             continue
@@ -57,10 +52,10 @@ function pngop --description "transfrom png into jpeg in dir"
         if not test (path extension $ifile) = '.png'
             continue
         end
-        set -l n_name (path change-extension '' $ifile)
-        magick "$l_old/$ifile" "$l_src/$n_name.jpg"
-        touch "$l_src/$n_name.jpg" -r "$l_old/$ifile"
-        print_progress $n_count $n_cur
-        set n_cur (math $n_cur + 1)
+        set -l l_nname (path change-extension '' $ifile)
+        magick "$l_old/$ifile" "$l_src/$l_nname.jpg"
+        touch "$l_src/$l_nname.jpg" -r "$l_old/$ifile"
+        print_progress $l_count $l_cur
+        set l_cur (math $l_cur + 1)
     end
 end

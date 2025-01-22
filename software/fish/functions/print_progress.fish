@@ -10,7 +10,7 @@ function __progress_build_info -a total current -d "Build string showing complet
         set padding " "
     end
 
-    echo ":: "$padding" "$current" / "$total" "
+    echo "\r:: "$padding" "$current" / "$total" "
 end
 
 function print_progress -a total current -d "Print one state of progress bar"

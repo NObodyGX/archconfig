@@ -17,7 +17,7 @@ function jpegop --description "Optimize jpeg with jpegoptim in dir"
 
     if not test -z $_flag_h
         __n_print_help
-        exit
+        return 0
     end
     if test -z "$argv"
         echo "error in param"

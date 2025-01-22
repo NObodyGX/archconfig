@@ -18,7 +18,7 @@ function extract --description "extract archives for any"
 
     if ! test -z $_flag_h
         __n_print_help
-        exit
+        return 0
     end
 
     set -l l_src (string split0 $argv --no-empty)
