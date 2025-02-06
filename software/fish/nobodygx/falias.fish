@@ -41,7 +41,7 @@ alias ex='extract'
 if type -q exa
     alias ls='exa --icons --group-directories-first '
     alias la 'exa --icons --all --group --header --binary --links --group-directories-first '
-    alias ll 'exa --icons --long --all --group --header --git --group-directories-first '
+    alias ll 'exa --icons --long --all --group --header --git --group-directories-first --total-size'
     alias ltree='exa  --icons --long --all --group --header --tree --level '
 end
 
@@ -52,18 +52,21 @@ function nvm
 end
 
 # nobodygx
+set ii "/data/ztaste/01-image"
 alias genmd='ncmd genmd .'
 if set -q rename
     set -e rename
 end
-alias ren='ncmd rename .'
-alias rens='ncmd rename . && ncmd rename . -f "mp4" -n "v{num:1}" && ncmd rename . -f "png" --start=99 && chmodxxx . '
 alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor='cd /data/shome && hexo cl && hexo s'
 alias hexog='cd /data/shome && hexo gen && cd -'
 alias hexocl='cd /data/shome && hexo cl '
 
+function ren --description 'rename files by ncmd rename'
+    ncmd rename . $argv
+    chmod -x (fd --type file .)
+end
 
 function coverinfo --description 'cal cover width and height'
     set -l jw (jpeginfo _cover.jpg | awk '{print $2}')

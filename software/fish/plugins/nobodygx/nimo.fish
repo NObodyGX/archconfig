@@ -50,8 +50,8 @@ function nimo --description "monite picture in dirs"
             echo "start nimo"
     end
 
-    set -l L_TMP_DIR "$nsrc/old"
-    set -l L_OTH_DIR "$nsrc/other"
+    set -l L_TMP_DIR "$nsrc/drop"
+    set -l L_OTH_DIR "$nsrc/todo"
     set -l L_SUC_DIR "$nsrc/succ"
     if ! test -d $L_TMP_DIR
         mkdir -p $L_TMP_DIR
