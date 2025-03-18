@@ -33,6 +33,9 @@ function dsort --description "sort dir index"
 
     set -l index $l_index
     for item in (ls $l_item)
+        if test -f $l_item/$item
+            continue
+        end
         set index (math $index + 1)
         set l_i (string pad -w $l_length --char=0 $index)
         dmv $item $l_i

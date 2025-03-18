@@ -7,7 +7,7 @@ function vidop --description "transform video by ffmpeg"
         echo 'Param:'
         echo "    idir: input dir, it will mv jpeg into zbackup"
         echo "Example:"
-        echo "    vidop . --rank=80"
+        echo "    vidop . --rank=0"
     end
 
     set -l options (fish_opt --short=h --long=help)

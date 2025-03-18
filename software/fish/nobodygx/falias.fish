@@ -32,6 +32,7 @@ alias yayR='yay -Rnsc '
 alias yayq='yay -Q | grep '
 alias kk='du -sh *'
 alias G='git clone --depth=1 '
+alias webdav='rclone serve webdav --addr 0.0.0.0:17781 '
 
 # cp mv
 alias gcp='rsync -avh --progress '
@@ -61,7 +62,26 @@ alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor='cd /data/shome && hexo cl && hexo s'
 alias hexog='cd /data/shome && hexo gen && cd -'
-alias hexocl='cd /data/shome && hexo cl '
+alias hexocl='cd /data/shome && hexo cl'
+
+function clear_history --description 'clear txt read history'
+    rm -f '/home/xun/.local/share/recently-used.xbel'
+end
+
+function loadresdisk --description 'load res disk'
+    # 仅在无外挂硬盘的时候启动
+    if test (ls "/run/media/xun/" | wc -l) -ne 0
+        echo "media is running."
+        return 0
+    end
+    if test (ls "/home/xun/env/mount/total/" | wc -l) -ne 0
+        echo "mount dir is full."
+        return 0
+    end
+    set -l disk "$argv[1]"
+    sudo mount -o gid=xun,uid=xun,fmask=113,dmask=002 /dev/$disk /home/xun/env/mount/total
+    ls /home/xun/env/mount/total
+end
 
 function ren --description 'rename files by ncmd rename'
     ncmd rename . $argv
