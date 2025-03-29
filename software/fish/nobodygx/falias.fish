@@ -39,10 +39,17 @@ alias gcp='rsync -avh --progress '
 # fish
 alias ex='extract'
 
+# gx
+alias todomv='ncmd shell file-mark'
+alias dmv='ncmd shell dir-index'
+alias dsort='ncmd shell dir-sort'
+
+# file list
 if type -q exa
     alias ls='exa --icons --group-directories-first '
     alias la 'exa --icons --all --group --header --binary --links --group-directories-first '
-    alias ll 'exa --icons --long --all --group --header --git --group-directories-first --total-size'
+    alias ll 'exa --icons --long --all --group --header --git --group-directories-first'
+    alias lls 'exa --icons --long --all --group --header --git --group-directories-first --total-size'
     alias ltree='exa  --icons --long --all --group --header --tree --level '
 end
 
