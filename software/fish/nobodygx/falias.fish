@@ -1,19 +1,29 @@
 set -U fish_greeting
 
 # Navigation
-function ..    ; cd .. ; end
-function ...   ; cd ../.. ; end
-function ....  ; cd ../../.. ; end
-function ..... ; cd ../../../.. ; end
+function ..
+    cd ..
+end
+function ...
+    cd ../..
+end
+function ....
+    cd ../../..
+end
+function .....
+    cd ../../../..
+end
 
 # Utilities
-function grep     ; command grep --color=auto $argv ; end
+function grep
+    command grep --color=auto $argv
+end
 
 # mv, rm, cp
 abbr rm 'rm -vrf'
 abbr cp 'cp -v'
-abbr q  'exit'
-abbr clr 'clear'
+abbr q exit
+abbr clr clear
 # normal
 
 alias mkdir='mkdir -pv'
@@ -40,9 +50,41 @@ alias gcp='rsync -avh --progress '
 alias ex='extract'
 
 # gx
-alias todomv='ncmd shell file-mark'
+###############################################################
+alias mdone='ncmd shell file-mark --mode done'
+alias mtodo='ncmd shell file-mark --mode todo'
+alias mhot='ncmd shell file-mark --mode hot'
+alias m100='ncmd shell file-mark --mode perfect'
+alias mstar='ncmd shell file-mark --mode star'
+alias mclean='ncmd shell file-mark --mode clean'
 alias dmv='ncmd shell dir-index'
-alias dsort='ncmd shell dir-sort'
+alias dsort='ncmd shell dir-sort . --quiet && ls'
+alias genmd='ncmd genmd .'
+if set -q rename
+    set -e rename
+end
+alias genmdu='ncmd genmd . -u'
+alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
+alias hexor='cd /data/shome && hexo cl && hexo s'
+alias hexog='cd /data/shome && hexo gen && cd -'
+alias hexocl='cd /data/shome && hexo cl'
+function dn --description "a fast op to go next dir"
+    ncmd shell dir-next .
+    if test -f /tmp/ncmd_target_dir
+        source /tmp/ncmd_target_dir
+    end
+    ls
+end
+function dext --description "mv file from a dir and rm dir"
+    set -l l_dir $argv[1]
+    if ! test -d $l_dir
+        echo "error input dir"
+        returnD
+    end
+    mv $l_dir/* .
+    rm -rf $l_dir
+end
+###############################################################
 
 # file list
 if type -q exa
@@ -58,18 +100,6 @@ end
 function nvm
     fenv source ~/.nvm/nvm.sh \; nvm $argv
 end
-
-# nobodygx
-set ii "/data/ztaste/01-image"
-alias genmd='ncmd genmd .'
-if set -q rename
-    set -e rename
-end
-alias genmdu='ncmd genmd . -u'
-alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
-alias hexor='cd /data/shome && hexo cl && hexo s'
-alias hexog='cd /data/shome && hexo gen && cd -'
-alias hexocl='cd /data/shome && hexo cl'
 
 function clear_history --description 'clear txt read history'
     rm -f '/home/xun/.local/share/recently-used.xbel'
