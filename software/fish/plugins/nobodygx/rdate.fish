@@ -26,5 +26,5 @@ function rdate --description "random date for year"
 
     # 将随机时间戳转换为日期
     date -d "@$random_timestamp" +"%Y-%m-%d"
-    date -d "@$random_timestamp" +"%Y-%m-%d" | xclip -selection clipboard
+    date -d "@$random_timestamp" +"%Y-%m-%d" | tr -d '\n' | xclip -selection clipboard
 end
