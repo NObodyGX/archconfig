@@ -51,6 +51,8 @@ function extract --description "extract archives for any"
                 unrar x $l_ifile -p$l_pwd $l_dst
             case '*.zip'
                 unzip $l_ifile -d $l_dst
+            case '*.epub'
+                unzip $l_ifile -d $l_dst
             case '*'
                 echo 'todo'
         end
