@@ -60,11 +60,13 @@ alias mshort='ncmd shell file-mark --mode short'
 alias mclean='ncmd shell file-mark --mode clean'
 alias dmv='ncmd shell dir-index'
 alias dsort='ncmd shell dir-sort . --quiet && ls'
-alias genmd='ncmd genmd .'
+alias pw='ncmd pworld .'
+alias pws='ncmd pworld . --show'
+alias pwx='helix .pworld.toml'
+alias genmd='ncmd genmd pworld '
 if set -q rename
     set -e rename
 end
-alias genmdu='ncmd genmd . -u'
 alias covertran='mogrify -resize 1280x676 _cover.jpg && identify _cover.jpg'
 alias hexor='cd /data/shome && hexo cl && hexo s'
 alias hexog='cd /data/shome && hexo gen && cd -'
@@ -84,6 +86,15 @@ function dext --description "mv file from a dir and rm dir"
     end
     mv $l_dir/* .
     rm -rf $l_dir
+end
+function qqsgnpc --description "mv desc"
+    set -l l_idx $argv[1]
+    set -l l_pat (string join '' "053" "$l_idx" "00")
+    echo "$l_pat"
+    brename -p "$l_pat" -r '01$1' -x
+    set -l l_pat (string join '' "053" "$l_idx" "15")
+    echo "$l_pat"
+    brename -p "$l_pat" -r '02$1' -x
 end
 ###############################################################
 

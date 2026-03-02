@@ -59,3 +59,7 @@ osc52 = "CopyPaste"
 [general]
 #设置改变配置自动启动 [window]的需要重启
 live_config_reload = true
+
+[scrolling]
+history = 1000
+multiplier = 3
